@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Atendimento</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    /* Imagem de fundo ajustada para cobrir a tela inteira */
+   
+    background-size: cover;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 90%;
+    max-width: 600px;
+    margin: 40px auto;
+    /* Fundo branco com leve transparência para destacar o formulário */
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+h2 {
+    text-align: center;
+    color: #2C5D8A;
+    margin-bottom: 25px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🏥 Atendimento Hospitalar</h2>
+
+<input id="nome" placeholder="Nome do Paciente">
+
+<input id="cpf" placeholder="CPF">
+
+<select id="tipo">
+    <option value="">Selecione o tipo de atendimento</option>
+    <option>Convênio</option>
+    <option>Particular</option>
+</select>
+
+<label style="display:block; margin-top:15px; color:#2C5D8A; font-weight:bold;">
+Foto do Paciente
+</label>
+
+<input type="file" id="foto">
+
+<button onclick="cadastrar()">Cadastrar Paciente</button>
+
+</div>
+
+<script>
+function cadastrar(){
+
+ fetch("http://localhost:3000/atendimento",{
+
+  method:"POST",
+
+  headers:{
+    "Content-Type":"application/json"
+  },
+
+  body:JSON.stringify({
+    nome:nome.value,
+    cpf:cpf.value,
+    tipo:tipo.value
+  })
+
+ });
+
+ alert("✅ Paciente enviado para triagem!");
+
+}
+</script>
+
+</body>
+</html>

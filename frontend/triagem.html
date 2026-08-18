@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Triagem</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#DCEEFF;
+  margin:0;
+}
+
+.container{
+  width:90%;
+  max-width:900px;
+  margin:40px auto;
+  background:white;
+  padding:30px;
+  border-radius:15px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2 style="text-align:center; color:#2C5D8A;">
+🏥 Triagem Hospitalar
+</h2>
+
+<input id="nome" placeholder="Nome">
+
+<select id="sintoma">
+
+<option value="">Selecione</option>
+<option value="dor_leve">Dor leve</option>
+<option value="resfriado">Resfriado</option>
+<option value="coriza">Coriza</option>
+<option value="tosse">Tosse</option>
+<option value="febre">Febre</option>
+<option value="vomito">Vômito</option>
+<option value="diarreia">Diarreia</option>
+<option value="falta_ar_moderada">Falta de ar moderada</option>
+<option value="falta_ar_grave">Falta de ar grave</option>
+<option value="infarto">Suspeita de infarto</option>
+<option value="avc">Suspeita de AVC</option>
+<option value="convulsao">Convulsão</option>
+<option value="hemorragia">Hemorragia</option>
+
+</select>
+
+<input
+id="temp"
+type="number"
+placeholder="Temperatura">
+
+<input
+id="alergia"
+placeholder="Alergias">
+
+<textarea
+id="observacao"
+placeholder="Observações"></textarea>
+
+<div id="resultado"></div>
+
+<button onclick="salvar()">
+Salvar Triagem
+</button>
+
+</div>
