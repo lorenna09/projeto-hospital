@@ -102,7 +102,7 @@ button:hover {
   <script>
     function login() {
 
-      fetch("http://localhost:3000/login", {
+      fetch("/login", {
         method: "POST",
 
         headers: {
@@ -120,7 +120,7 @@ button:hover {
       .then(data => {
 
         if (data.tipo === "triagem")
-          location.href = "triagem.html";
+            location.href = "triagem.html";
 
         if (data.tipo === "medico")
           location.href = "medico.html";
