@@ -99,12 +99,45 @@ button:hover {
 
 <input id="nomeAnimal" placeholder="Nome do animal">
 
-<input id="especie" placeholder="Espécie">
+<label>Espécie</label>
 
-<input id="raca" placeholder="Raça">
+<select id="especie">
+    <option value="">Selecione a espécie</option>
+    <option value="Cachorro">🐶 Cachorro</option>
+    <option value="Gato">🐱 Gato</option>
+    <option value="Coelho">🐰 Coelho</option>
+    <option value="Ave">🦜 Ave</option>
+    <option value="Outro">🐾 Outro</option>
+</select>
+
+<label>Raça</label>
+
+<select id="raca">
+    <option value="">Selecione a raça</option>
+    <option value="Labrador">Labrador</option>
+    <option value="Golden Retriever">Golden Retriever</option>
+    <option value="Poodle">Poodle</option>
+    <option value="Shih-tzu">Shih-tzu</option>
+    <option value="Yorkshire">Yorkshire</option>
+    <option value="Bulldog Francês">Bulldog Francês</option>
+    <option value="Bulldog Inglês">Bulldog Inglês</option>
+    <option value="Pastor Alemão">Pastor Alemão</option>
+    <option value="Rottweiler">Rottweiler</option>
+    <option value="Pinscher">Pinscher</option>
+    <option value="Chihuahua">Chihuahua</option>
+    <option value="Dachshund (Salsicha)">Dachshund (Salsicha)</option>
+    <option value="Beagle">Beagle</option>
+    <option value="Husky Siberiano">Husky Siberiano</option>
+    <option value="Border Collie">Border Collie</option>
+    <option value="Vira-lata (SRD)">Vira-lata (SRD)</option>
+    <option value="Outra">Outra</option>
+</select>
 
 <label>Data de nascimento</label>
+
 <input id="dataNascimento" type="date">
+
+<label>Sexo</label>
 
 <select id="sexo">
     <option value="">Selecione o sexo</option>
@@ -117,6 +150,7 @@ button:hover {
 <input id="cor" placeholder="Cor do pelo">
 
 <label>Foto do animal</label>
+
 <input type="file" id="foto">
 
 <h3>👤 Dados do Tutor</h3>
@@ -225,5 +259,4 @@ function cadastrar(){
 </script>
 
 </body>
-
 </html>
