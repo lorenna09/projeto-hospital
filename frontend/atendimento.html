@@ -22,7 +22,7 @@ body {
     width: 90%;
     max-width: 600px;
     margin: 40px auto;
-    background: rgba(255, 255, 255, 0.98);
+    background: white;
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.15);
@@ -84,7 +84,6 @@ button:hover {
 }
 
 </style>
-
 </head>
 
 <body>
@@ -125,7 +124,7 @@ button:hover {
     <option value="Rottweiler">Rottweiler</option>
     <option value="Pinscher">Pinscher</option>
     <option value="Chihuahua">Chihuahua</option>
-    <option value="Dachshund (Salsicha)">Dachshund (Salsicha)</option>
+    <option value="Dachshund">Dachshund</option>
     <option value="Beagle">Beagle</option>
     <option value="Husky Siberiano">Husky Siberiano</option>
     <option value="Border Collie">Border Collie</option>
@@ -145,7 +144,12 @@ button:hover {
     <option value="Fêmea">Fêmea</option>
 </select>
 
-<input id="peso" type="number" step="0.1" placeholder="Peso (kg)">
+<input
+    id="peso"
+    type="number"
+    step="0.1"
+    placeholder="Peso (kg)"
+>
 
 <label>Cor do pelo</label>
 
@@ -154,7 +158,7 @@ button:hover {
     <option value="Preto">⚫ Preto</option>
     <option value="Branco">⚪ Branco</option>
     <option value="Marrom">🟤 Marrom</option>
-    <option value="Caramelo">🟤 Caramelo</option>
+    <option value="Caramelo">Caramelo</option>
     <option value="Cinza">🩶 Cinza</option>
     <option value="Bege">Bege</option>
     <option value="Dourado">Dourado</option>
@@ -177,11 +181,18 @@ button:hover {
 
 <input id="telefoneTutor" placeholder="Telefone do tutor">
 
-<input id="emailTutor" type="email" placeholder="E-mail do tutor">
+<input
+    id="emailTutor"
+    type="email"
+    placeholder="E-mail do tutor"
+>
 
 <input id="endereco" placeholder="Endereço">
 
-<input id="contatoEmergencia" placeholder="Contato de emergência">
+<input
+    id="contatoEmergencia"
+    placeholder="Contato de emergência"
+>
 
 <h3>🩺 Informações de Saúde</h3>
 
@@ -195,7 +206,9 @@ button:hover {
     <option value="Carne bovina">Carne bovina</option>
     <option value="Leite">Leite</option>
     <option value="Pulgas">Pulgas</option>
-    <option value="Produtos de limpeza">Produtos de limpeza</option>
+    <option value="Produtos de limpeza">
+        Produtos de limpeza
+    </option>
     <option value="Medicamentos">Medicamentos</option>
     <option value="Pólen">Pólen</option>
     <option value="Poeira">Poeira</option>
@@ -203,9 +216,10 @@ button:hover {
     <option value="Outra">Outra</option>
 </select>
 
-
-
-<textarea id="observacoes" placeholder="Observações"></textarea>
+<textarea
+    id="observacoes"
+    placeholder="Observações"
+></textarea>
 
 <h3>💳 Tipo de Atendimento</h3>
 
@@ -220,7 +234,6 @@ button:hover {
 </button>
 
 </div>
-
 </div>
 
 <script>
@@ -229,37 +242,53 @@ function cadastrar(){
 
     const dados = {
 
-        nomeAnimal: document.getElementById("nomeAnimal").value,
+        nomeAnimal:
+            document.getElementById("nomeAnimal").value,
 
-        especie: document.getElementById("especie").value,
+        especie:
+            document.getElementById("especie").value,
 
-        raca: document.getElementById("raca").value,
+        raca:
+            document.getElementById("raca").value,
 
-        dataNascimento: document.getElementById("dataNascimento").value,
+        dataNascimento:
+            document.getElementById("dataNascimento").value,
 
-        sexo: document.getElementById("sexo").value,
+        sexo:
+            document.getElementById("sexo").value,
 
-        peso: document.getElementById("peso").value,
+        peso:
+            document.getElementById("peso").value,
 
-        cor: document.getElementById("cor").value,
+        cor:
+            document.getElementById("cor").value,
 
-        nomeTutor: document.getElementById("nomeTutor").value,
+        nomeTutor:
+            document.getElementById("nomeTutor").value,
 
-        documentoTutor: document.getElementById("documentoTutor").value,
+        documentoTutor:
+            document.getElementById("documentoTutor").value,
 
-        telefoneTutor: document.getElementById("telefoneTutor").value,
+        telefoneTutor:
+            document.getElementById("telefoneTutor").value,
 
-        emailTutor: document.getElementById("emailTutor").value,
+        emailTutor:
+            document.getElementById("emailTutor").value,
 
-        endereco: document.getElementById("endereco").value,
+        endereco:
+            document.getElementById("endereco").value,
 
-        contatoEmergencia: document.getElementById("contatoEmergencia").value,
+        contatoEmergencia:
+            document.getElementById("contatoEmergencia").value,
 
-        alergias: document.getElementById("alergias").value,
+        alergias:
+            document.getElementById("alergias").value,
 
-        observacoes: document.getElementById("observacoes").value,
+        observacoes:
+            document.getElementById("observacoes").value,
 
-        tipo: document.getElementById("tipo").value
+        tipo:
+            document.getElementById("tipo").value
 
     };
 
@@ -274,17 +303,33 @@ function cadastrar(){
         body: JSON.stringify(dados)
 
     })
-    .then(r => r.json())
+
+    .then(async resposta => {
+
+        const texto = await resposta.text();
+
+        if (!resposta.ok) {
+            throw new Error(texto);
+        }
+
+        return texto ? JSON.parse(texto) : {};
+
+    })
+
     .then(data => {
 
         alert("🐶✅ Animal cadastrado e enviado para a triagem!");
 
     })
-    .catch(error => {
 
-        alert("❌ Erro ao cadastrar o animal.");
+    .catch(erro => {
 
-        console.error(error);
+        console.error("Erro completo:", erro);
+
+        alert(
+            "❌ Erro ao cadastrar o animal.\n\n" +
+            erro.message
+        );
 
     });
 
