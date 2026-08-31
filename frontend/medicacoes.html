@@ -1,58 +1,7 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Medicações Prescritas</title>
-
   <link rel="stylesheet" href="css/style.css">
-
-  <style>
-
-    body {
-      background: #DCEEFF;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      min-height: 100vh;
-    }
-
-    .container {
-      width: 90%;
-      max-width: 900px;
-      margin: 40px auto;
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.10);
-    }
-
-    h2 {
-      text-align: center;
-      color: #2C5D8A;
-      margin-bottom: 30px;
-    }
-
-    .card {
-      background: #f5f9ff;
-      border: 1px solid #d6e5f5;
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 15px;
-    }
-
-    .card h3 {
-      color: #2C5D8A;
-      margin-top: 0;
-    }
-
-    .erro {
-      background: #ffe5e5;
-      color: #a00000;
-      padding: 15px;
-      border-radius: 8px;
-    }
-
-  </style>
 </head>
 
 <body>
@@ -61,104 +10,51 @@
 
   <h2>💊 Medicações Prescritas</h2>
 
-  <div id="listaMedicacoes">
-    <p>Carregando medicações...</p>
-  </div>
+  <!-- IMPLEMENTADO: local onde a lista de medicações será exibida -->
+  <div id="listaMedicacoes"></div>
 
 </div>
 
-
 <script>
 
+// IMPLEMENTADO: busca as consultas salvas e mostra as medicações
 function carregarMedicacoesPrescritas() {
-
   fetch("/medicacoes")
-
-    .then(resposta => {
-
-      if (!resposta.ok) {
-        throw new Error(
-          "A rota /medicacoes não foi encontrada."
-        );
-      }
-
-      return resposta.json();
-
-    })
-
+    .then(r => r.json())
     .then(data => {
-
-      const div =
-        document.getElementById("listaMedicacoes");
+      const div = document.getElementById("listaMedicacoes");
 
       div.innerHTML = "";
 
-      if (!Array.isArray(data) || data.length === 0) {
-
-        div.innerHTML =
-          "<p>Nenhuma medicação prescrita.</p>";
-
+      if (data.length === 0) {
+        div.innerHTML = "<p>Nenhuma medicação prescrita.</p>";
         return;
       }
 
       data.forEach(c => {
-
         div.innerHTML += `
-
           <div class="card">
-
-            <h3>🐾 ${c.paciente || "Animal não informado"}</h3>
+            <h3>${c.paciente}</h3>
 
             <p>
-              <b>💊 Medicação:</b>
-              ${c.medicacao || "Não informada"}
+              <b>Medicação:</b>
+              ${c.medicacao}
             </p>
 
             <p>
-              <b>🩺 Diagnóstico:</b>
-              ${c.diagnostico || "Não informado"}
+              <b>Diagnóstico:</b>
+              ${c.diagnostico}
             </p>
 
             <p>
-              <b>📝 Observações:</b>
+              <b>Observações:</b>
               ${c.obs || "Nenhuma"}
             </p>
-
           </div>
-
         `;
-
       });
-
-    })
-
-    .catch(erro => {
-
-      console.error("Erro:", erro);
-
-      document.getElementById("listaMedicacoes").innerHTML = `
-
-        <div class="erro">
-
-          ❌ Não foi possível carregar as medicações.
-
-          <br><br>
-
-          <b>Erro:</b> ${erro.message}
-
-          <br><br>
-
-          Verifique se o servidor está ligado e se a rota
-          <b>/medicacoes</b> existe no backend.
-
-        </div>
-
-      `;
-
     });
-
 }
-
 
 carregarMedicacoesPrescritas();
 
