@@ -76,11 +76,11 @@ label {
 }
 
 .telefone select {
-    width: 150px !important;
+    width: 155px !important;
 }
 
 #ddd {
-    width: 80px;
+    width: 70px;
     flex-shrink: 0;
 }
 
@@ -107,7 +107,7 @@ button:hover {
     background: #468CC7;
 }
 
-/* ÁREA DA CÂMERA */
+/* CÂMERA */
 
 #cameraArea {
     margin-top: 15px;
@@ -140,7 +140,10 @@ button:hover {
 
 <div class="formulario">
 
+
+<!-- ========================= -->
 <!-- DADOS DO ANIMAL -->
+<!-- ========================= -->
 
 <h3>🐾 Dados do Animal</h3>
 
@@ -162,10 +165,13 @@ button:hover {
     <option value="Outro">🐾 Outro</option>
 </select>
 
+
 <label>Raça</label>
 
 <select id="raca">
+
     <option value="">Selecione a raça</option>
+
     <option>Labrador</option>
     <option>Golden Retriever</option>
     <option>Poodle</option>
@@ -183,7 +189,9 @@ button:hover {
     <option>Border Collie</option>
     <option>Vira-lata (SRD)</option>
     <option>Outra</option>
+
 </select>
+
 
 <label>Data de nascimento</label>
 
@@ -192,13 +200,19 @@ button:hover {
     type="date"
 >
 
+
 <label>Sexo</label>
 
 <select id="sexo">
+
     <option value="">Selecione o sexo</option>
+
     <option value="Macho">Macho</option>
+
     <option value="Fêmea">Fêmea</option>
+
 </select>
+
 
 <label>Peso</label>
 
@@ -210,10 +224,13 @@ button:hover {
     placeholder="Peso em kg"
 >
 
+
 <label>Cor do pelo</label>
 
 <select id="cor">
+
     <option value="">Selecione a cor do pelo</option>
+
     <option>Preto</option>
     <option>Branco</option>
     <option>Marrom</option>
@@ -226,29 +243,47 @@ button:hover {
     <option>Marrom e branco</option>
     <option>Tricolor</option>
     <option>Outra</option>
+
 </select>
+
 
 <label>Tipo sanguíneo</label>
 
 <select id="tipoSanguineo">
-    <option value="">Selecione o tipo sanguíneo</option>
-    <option value="DEA 1 positivo">DEA 1 positivo</option>
-    <option value="DEA 1 negativo">DEA 1 negativo</option>
-    <option value="Desconhecido">Desconhecido</option>
+
+    <option value="">
+        Selecione o tipo sanguíneo
+    </option>
+
+    <option value="DEA 1 positivo">
+        DEA 1 positivo
+    </option>
+
+    <option value="DEA 1 negativo">
+        DEA 1 negativo
+    </option>
+
+    <option value="Desconhecido">
+        Desconhecido
+    </option>
+
 </select>
 
 
+<!-- ========================= -->
 <!-- FOTO -->
+<!-- ========================= -->
 
 <h3>📷 Foto do Animal</h3>
 
-<label>Escolher uma foto</label>
+<label>Escolher foto do computador</label>
 
 <input
     type="file"
     id="foto"
     accept="image/*"
 >
+
 
 <button
     type="button"
@@ -257,13 +292,18 @@ button:hover {
     📷 Tirar foto com a câmera
 </button>
 
-<div id="cameraArea" style="display:none;">
+
+<div
+    id="cameraArea"
+    style="display:none;"
+>
 
     <video
         id="camera"
         autoplay
         playsinline
     ></video>
+
 
     <button
         type="button"
@@ -272,6 +312,7 @@ button:hover {
         📸 Capturar foto
     </button>
 
+
     <button
         type="button"
         onclick="fecharCamera()"
@@ -279,10 +320,12 @@ button:hover {
         ❌ Fechar câmera
     </button>
 
+
     <canvas
         id="canvas"
         style="display:none;"
     ></canvas>
+
 
     <img
         id="preview"
@@ -292,9 +335,12 @@ button:hover {
 </div>
 
 
+<!-- ========================= -->
 <!-- DADOS DO TUTOR -->
+<!-- ========================= -->
 
 <h3>👤 Dados do Tutor</h3>
+
 
 <input
     id="nomeTutor"
@@ -302,6 +348,7 @@ button:hover {
     maxlength="100"
     placeholder="Nome completo do tutor"
 >
+
 
 <label>CPF</label>
 
@@ -317,30 +364,85 @@ button:hover {
 
 <label>Telefone</label>
 
+
 <div class="telefone">
 
 <select id="codigoPais">
 
-    <option value="+55">🇧🇷 Brasil +55</option>
-    <option value="+1">🇺🇸 Estados Unidos +1</option>
-    <option value="+1">🇨🇦 Canadá +1</option>
-    <option value="+52">🇲🇽 México +52</option>
-    <option value="+54">🇦🇷 Argentina +54</option>
-    <option value="+56">🇨🇱 Chile +56</option>
-    <option value="+57">🇨🇴 Colômbia +57</option>
-    <option value="+351">🇵🇹 Portugal +351</option>
-    <option value="+34">🇪🇸 Espanha +34</option>
-    <option value="+33">🇫🇷 França +33</option>
-    <option value="+49">🇩🇪 Alemanha +49</option>
-    <option value="+39">🇮🇹 Itália +39</option>
-    <option value="+41">🇨🇭 Suíça +41</option>
-    <option value="+44">🇬🇧 Reino Unido +44</option>
-    <option value="+81">🇯🇵 Japão +81</option>
-    <option value="+86">🇨🇳 China +86</option>
-    <option value="+61">🇦🇺 Austrália +61</option>
-    <option value="+91">🇮🇳 Índia +91</option>
+    <option value="+55">
+        🇧🇷 Brasil +55
+    </option>
+
+    <option value="+1">
+        🇺🇸 Estados Unidos +1
+    </option>
+
+    <option value="+1">
+        🇨🇦 Canadá +1
+    </option>
+
+    <option value="+52">
+        🇲🇽 México +52
+    </option>
+
+    <option value="+54">
+        🇦🇷 Argentina +54
+    </option>
+
+    <option value="+56">
+        🇨🇱 Chile +56
+    </option>
+
+    <option value="+57">
+        🇨🇴 Colômbia +57
+    </option>
+
+    <option value="+351">
+        🇵🇹 Portugal +351
+    </option>
+
+    <option value="+34">
+        🇪🇸 Espanha +34
+    </option>
+
+    <option value="+33">
+        🇫🇷 França +33
+    </option>
+
+    <option value="+49">
+        🇩🇪 Alemanha +49
+    </option>
+
+    <option value="+39">
+        🇮🇹 Itália +39
+    </option>
+
+    <option value="+41">
+        🇨🇭 Suíça +41
+    </option>
+
+    <option value="+44">
+        🇬🇧 Reino Unido +44
+    </option>
+
+    <option value="+81">
+        🇯🇵 Japão +81
+    </option>
+
+    <option value="+86">
+        🇨🇳 China +86
+    </option>
+
+    <option value="+61">
+        🇦🇺 Austrália +61
+    </option>
+
+    <option value="+91">
+        🇮🇳 Índia +91
+    </option>
 
 </select>
+
 
 <input
     id="ddd"
@@ -348,16 +450,20 @@ button:hover {
     inputmode="numeric"
     maxlength="2"
     placeholder="DDD"
-    oninput="this.value = this.value.replace(/\D/g, '').slice(0,2)"
+    oninput="
+        this.value =
+        this.value.replace(/\D/g,'').slice(0,2)
+    "
 >
+
 
 <input
     id="telefone"
     type="text"
     inputmode="numeric"
-    maxlength="9"
-    placeholder="Número"
-    oninput="this.value = this.value.replace(/\D/g, '').slice(0,9)"
+    maxlength="10"
+    placeholder="99999-9999"
+    oninput="formatarTelefone(this)"
 >
 
 </div>
@@ -370,12 +476,14 @@ button:hover {
     placeholder="E-mail do tutor"
 >
 
+
 <input
     id="endereco"
     type="text"
     maxlength="150"
     placeholder="Endereço completo"
 >
+
 
 <input
     id="contatoEmergencia"
@@ -385,27 +493,68 @@ button:hover {
 >
 
 
+<!-- ========================= -->
 <!-- SAÚDE -->
+<!-- ========================= -->
 
 <h3>🩺 Informações de Saúde</h3>
+
 
 <label>Alergias</label>
 
 <select id="alergias">
 
-    <option value="">Selecione uma alergia</option>
-    <option value="Nenhuma">Nenhuma alergia conhecida</option>
-    <option value="Ração">Ração</option>
-    <option value="Frango">Frango</option>
-    <option value="Carne bovina">Carne bovina</option>
-    <option value="Leite">Leite</option>
-    <option value="Pulgas">Pulgas</option>
-    <option value="Produtos de limpeza">Produtos de limpeza</option>
-    <option value="Medicamentos">Medicamentos</option>
-    <option value="Pólen">Pólen</option>
-    <option value="Poeira">Poeira</option>
-    <option value="Plantas">Plantas</option>
-    <option value="Outra">Outra</option>
+    <option value="">
+        Selecione uma alergia
+    </option>
+
+    <option value="Nenhuma">
+        Nenhuma alergia conhecida
+    </option>
+
+    <option value="Ração">
+        Ração
+    </option>
+
+    <option value="Frango">
+        Frango
+    </option>
+
+    <option value="Carne bovina">
+        Carne bovina
+    </option>
+
+    <option value="Leite">
+        Leite
+    </option>
+
+    <option value="Pulgas">
+        Pulgas
+    </option>
+
+    <option value="Produtos de limpeza">
+        Produtos de limpeza
+    </option>
+
+    <option value="Medicamentos">
+        Medicamentos
+    </option>
+
+    <option value="Pólen">
+        Pólen
+    </option>
+
+    <option value="Poeira">
+        Poeira
+    </option>
+
+    <option value="Plantas">
+        Plantas
+    </option>
+
+    <option value="Outra">
+        Outra
+    </option>
 
 </select>
 
@@ -417,9 +566,12 @@ button:hover {
 ></textarea>
 
 
-<!-- TIPO DE ATENDIMENTO -->
+<!-- ========================= -->
+<!-- ATENDIMENTO -->
+<!-- ========================= -->
 
 <h3>💳 Tipo de Atendimento</h3>
+
 
 <select id="tipo">
 
@@ -445,6 +597,7 @@ button:hover {
     🐾 Cadastrar Animal
 </button>
 
+
 </div>
 
 </div>
@@ -452,8 +605,9 @@ button:hover {
 
 <script>
 
+
 /* ========================= */
-/* FORMATAR CPF */
+/* CPF */
 /* ========================= */
 
 function formatarCPF(campo) {
@@ -461,7 +615,9 @@ function formatarCPF(campo) {
     let cpf =
         campo.value.replace(/\D/g, "");
 
-    cpf = cpf.slice(0, 11);
+    cpf =
+        cpf.slice(0, 11);
+
 
     if (cpf.length > 9) {
 
@@ -470,22 +626,63 @@ function formatarCPF(campo) {
             "$1.$2.$3.$4"
         );
 
-    } else if (cpf.length > 6) {
+    }
+
+    else if (cpf.length > 6) {
 
         cpf = cpf.replace(
             /(\d{3})(\d{3})(\d{1,3})/,
             "$1.$2.$3"
         );
 
-    } else if (cpf.length > 3) {
+    }
+
+    else if (cpf.length > 3) {
 
         cpf = cpf.replace(
             /(\d{3})(\d{1,3})/,
             "$1.$2"
         );
+
     }
 
+
     campo.value = cpf;
+
+}
+
+
+/* ========================= */
+/* TELEFONE */
+/* ========================= */
+
+function formatarTelefone(campo) {
+
+    let telefone =
+        campo.value.replace(/\D/g, "");
+
+
+    // Limite de 9 números
+
+    telefone =
+        telefone.slice(0, 9);
+
+
+    // Formato 99999-9999
+
+    if (telefone.length > 5) {
+
+        telefone =
+            telefone.replace(
+                /(\d{5})(\d{1,4})/,
+                "$1-$2"
+            );
+
+    }
+
+
+    campo.value = telefone;
+
 }
 
 
@@ -499,25 +696,37 @@ let streamCamera = null;
 function abrirCamera() {
 
     const area =
-        document.getElementById("cameraArea");
+        document.getElementById(
+            "cameraArea"
+        );
+
 
     const video =
-        document.getElementById("camera");
+        document.getElementById(
+            "camera"
+        );
 
-    area.style.display = "block";
+
+    area.style.display =
+        "block";
+
 
     navigator.mediaDevices
         .getUserMedia({
             video: true
         })
 
+
         .then(stream => {
 
-            streamCamera = stream;
+            streamCamera =
+                stream;
 
-            video.srcObject = stream;
+            video.srcObject =
+                stream;
 
         })
+
 
         .catch(erro => {
 
@@ -525,31 +734,48 @@ function abrirCamera() {
                 "❌ Não foi possível acessar a câmera."
             );
 
-            console.error(erro);
+            console.error(
+                erro
+            );
 
         });
+
 }
 
 
 function tirarFoto() {
 
     const video =
-        document.getElementById("camera");
+        document.getElementById(
+            "camera"
+        );
+
 
     const canvas =
-        document.getElementById("canvas");
+        document.getElementById(
+            "canvas"
+        );
+
 
     const preview =
-        document.getElementById("preview");
+        document.getElementById(
+            "preview"
+        );
+
 
     canvas.width =
         video.videoWidth;
 
+
     canvas.height =
         video.videoHeight;
 
+
     const contexto =
-        canvas.getContext("2d");
+        canvas.getContext(
+            "2d"
+        );
+
 
     contexto.drawImage(
         video,
@@ -559,36 +785,50 @@ function tirarFoto() {
         canvas.height
     );
 
+
     preview.src =
-        canvas.toDataURL("image/png");
+        canvas.toDataURL(
+            "image/png"
+        );
+
 
     preview.style.display =
         "block";
 
+
     alert(
         "📸 Foto capturada com sucesso!"
     );
+
 }
 
 
 function fecharCamera() {
 
     const area =
-        document.getElementById("cameraArea");
+        document.getElementById(
+            "cameraArea"
+        );
+
 
     if (streamCamera) {
 
         streamCamera
             .getTracks()
-            .forEach(track =>
-                track.stop()
-            );
+            .forEach(track => {
+                track.stop();
+            });
 
-        streamCamera = null;
+
+        streamCamera =
+            null;
+
     }
+
 
     area.style.display =
         "none";
+
 }
 
 
@@ -598,110 +838,168 @@ function fecharCamera() {
 
 function cadastrar() {
 
+
     const dados = {
+
 
         nomeAnimal:
             document
-            .getElementById("nomeAnimal")
+            .getElementById(
+                "nomeAnimal"
+            )
             .value
             .trim(),
+
 
         especie:
             document
-            .getElementById("especie")
+            .getElementById(
+                "especie"
+            )
             .value,
+
 
         raca:
             document
-            .getElementById("raca")
+            .getElementById(
+                "raca"
+            )
             .value,
+
 
         dataNascimento:
             document
-            .getElementById("dataNascimento")
+            .getElementById(
+                "dataNascimento"
+            )
             .value,
+
 
         sexo:
             document
-            .getElementById("sexo")
+            .getElementById(
+                "sexo"
+            )
             .value,
+
 
         peso:
             document
-            .getElementById("peso")
+            .getElementById(
+                "peso"
+            )
             .value,
+
 
         cor:
             document
-            .getElementById("cor")
+            .getElementById(
+                "cor"
+            )
             .value,
+
 
         tipoSanguineo:
             document
-            .getElementById("tipoSanguineo")
+            .getElementById(
+                "tipoSanguineo"
+            )
             .value,
+
 
         nomeTutor:
             document
-            .getElementById("nomeTutor")
+            .getElementById(
+                "nomeTutor"
+            )
             .value
             .trim(),
+
 
         documentoTutor:
             document
-            .getElementById("documentoTutor")
+            .getElementById(
+                "documentoTutor"
+            )
             .value
             .replace(/\D/g, ""),
+
 
         codigoPais:
             document
-            .getElementById("codigoPais")
+            .getElementById(
+                "codigoPais"
+            )
             .value,
+
 
         ddd:
             document
-            .getElementById("ddd")
+            .getElementById(
+                "ddd"
+            )
             .value
             .replace(/\D/g, ""),
+
 
         telefone:
             document
-            .getElementById("telefone")
+            .getElementById(
+                "telefone"
+            )
             .value
             .replace(/\D/g, ""),
 
+
         emailTutor:
             document
-            .getElementById("emailTutor")
+            .getElementById(
+                "emailTutor"
+            )
             .value
             .trim(),
+
 
         endereco:
             document
-            .getElementById("endereco")
+            .getElementById(
+                "endereco"
+            )
             .value
             .trim(),
+
 
         contatoEmergencia:
             document
-            .getElementById("contatoEmergencia")
+            .getElementById(
+                "contatoEmergencia"
+            )
             .value
             .trim(),
+
 
         alergias:
             document
-            .getElementById("alergias")
+            .getElementById(
+                "alergias"
+            )
             .value,
+
 
         observacoes:
             document
-            .getElementById("observacoes")
+            .getElementById(
+                "observacoes"
+            )
             .value
             .trim(),
 
+
         tipo:
             document
-            .getElementById("tipo")
+            .getElementById(
+                "tipo"
+            )
             .value
 
     };
@@ -709,41 +1007,50 @@ function cadastrar() {
 
     /* VALIDAR CPF */
 
-    if (dados.documentoTutor.length !== 11) {
+    if (
+        dados.documentoTutor.length !== 11
+    ) {
 
         alert(
             "⚠️ O CPF deve ter exatamente 11 números."
         );
 
         return;
+
     }
 
 
     /* VALIDAR DDD */
 
-    if (dados.ddd.length !== 2) {
+    if (
+        dados.ddd.length !== 2
+    ) {
 
         alert(
             "⚠️ O DDD deve ter exatamente 2 números."
         );
 
         return;
+
     }
 
 
     /* VALIDAR TELEFONE */
 
-    if (dados.telefone.length !== 9) {
+    if (
+        dados.telefone.length !== 9
+    ) {
 
         alert(
             "⚠️ O telefone deve ter exatamente 9 números."
         );
 
         return;
+
     }
 
 
-    /* ENVIAR PARA O SERVIDOR */
+    /* ENVIAR */
 
     fetch(
         "http://localhost:3000/atendimento",
@@ -762,10 +1069,12 @@ function cadastrar() {
         }
     )
 
+
     .then(async resposta => {
 
         const texto =
             await resposta.text();
+
 
         if (!resposta.ok) {
 
@@ -776,11 +1085,13 @@ function cadastrar() {
 
         }
 
+
         return texto
             ? JSON.parse(texto)
             : {};
 
     })
+
 
     .then(() => {
 
@@ -790,12 +1101,14 @@ function cadastrar() {
 
     })
 
+
     .catch(erro => {
 
         console.error(
             "Erro completo:",
             erro
         );
+
 
         alert(
             "❌ Erro ao cadastrar o animal.\n\n" +
