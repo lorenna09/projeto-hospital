@@ -67,6 +67,29 @@ label {
     margin-top: 10px;
 }
 
+/* TELEFONE */
+
+.telefone {
+    display: flex;
+    gap: 8px;
+}
+
+.telefone select {
+    width: 160px !important;
+}
+
+.telefone input {
+    min-width: 0;
+}
+
+#ddd {
+    width: 80px;
+}
+
+#telefone {
+    flex: 1;
+}
+
 button {
     width: 100%;
     padding: 13px;
@@ -133,7 +156,6 @@ button:hover {
 </select>
 
 <label>Data de nascimento</label>
-
 <input id="dataNascimento" type="date">
 
 <label>Sexo</label>
@@ -169,17 +191,66 @@ button:hover {
     <option value="Outra">Outra</option>
 </select>
 
-<label>Foto do animal</label>
+<label>Tipo sanguíneo</label>
 
+<select id="tipoSanguineo">
+    <option value="">Selecione o tipo sanguíneo</option>
+    <option value="DEA 1 positivo">DEA 1 positivo</option>
+    <option value="DEA 1 negativo">DEA 1 negativo</option>
+    <option value="Desconhecido">Desconhecido</option>
+</select>
+
+<label>Foto do animal</label>
 <input type="file" id="foto">
 
 <h3>👤 Dados do Tutor</h3>
 
 <input id="nomeTutor" placeholder="Nome do tutor">
 
-<input id="documentoTutor" placeholder="CPF do tutor">
+<input id="documentoTutor" placeholder="CPF ou documento">
 
-<input id="telefoneTutor" placeholder="Telefone do tutor">
+<label>Telefone</label>
+
+<div class="telefone">
+
+    <select id="codigoPais">
+        <option value="+55">🇧🇷 +55</option>
+        <option value="+1">🇺🇸 +1</option>
+        <option value="+1">🇨🇦 +1</option>
+        <option value="+52">🇲🇽 +52</option>
+        <option value="+54">🇦🇷 +54</option>
+        <option value="+56">🇨🇱 +56</option>
+        <option value="+57">🇨🇴 +57</option>
+        <option value="+351">🇵🇹 +351</option>
+        <option value="+34">🇪🇸 +34</option>
+        <option value="+33">🇫🇷 +33</option>
+        <option value="+49">🇩🇪 +49</option>
+        <option value="+39">🇮🇹 +39</option>
+        <option value="+41">🇨🇭 +41</option>
+        <option value="+44">🇬🇧 +44</option>
+        <option value="+81">🇯🇵 +81</option>
+        <option value="+86">🇨🇳 +86</option>
+        <option value="+61">🇦🇺 +61</option>
+        <option value="+91">🇮🇳 +91</option>
+    </select>
+
+    <input
+        id="ddd"
+        type="text"
+        inputmode="numeric"
+        maxlength="5"
+        placeholder="DDD"
+    >
+
+    <input
+        id="telefone"
+        type="text"
+        inputmode="numeric"
+        maxlength="15"
+        placeholder="Número"
+    >
+
+</div>
 
 <input
     id="emailTutor"
@@ -206,9 +277,7 @@ button:hover {
     <option value="Carne bovina">Carne bovina</option>
     <option value="Leite">Leite</option>
     <option value="Pulgas">Pulgas</option>
-    <option value="Produtos de limpeza">
-        Produtos de limpeza
-    </option>
+    <option value="Produtos de limpeza">Produtos de limpeza</option>
     <option value="Medicamentos">Medicamentos</option>
     <option value="Pólen">Pólen</option>
     <option value="Poeira">Poeira</option>
@@ -263,14 +332,23 @@ function cadastrar(){
         cor:
             document.getElementById("cor").value,
 
+        tipoSanguineo:
+            document.getElementById("tipoSanguineo").value,
+
         nomeTutor:
             document.getElementById("nomeTutor").value,
 
         documentoTutor:
             document.getElementById("documentoTutor").value,
 
-        telefoneTutor:
-            document.getElementById("telefoneTutor").value,
+        codigoPais:
+            document.getElementById("codigoPais").value,
+
+        ddd:
+            document.getElementById("ddd").value,
+
+        telefone:
+            document.getElementById("telefone").value,
 
         emailTutor:
             document.getElementById("emailTutor").value,
@@ -291,6 +369,20 @@ function cadastrar(){
             document.getElementById("tipo").value
 
     };
+
+    /* Verifica o DDD/código regional */
+
+    if (dados.ddd.length > 5) {
+        alert("⚠️ O DDD/código regional pode ter no máximo 5 números.");
+        return;
+    }
+
+    /* Verifica o telefone */
+
+    if (dados.telefone.length < 6 || dados.telefone.length > 15) {
+        alert("⚠️ O telefone deve ter entre 6 e 15 números.");
+        return;
+    }
 
     fetch("http://localhost:3000/atendimento", {
 
