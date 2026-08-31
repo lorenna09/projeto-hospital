@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
 <meta charset="UTF-8">
-<title>Triagem</title>
+<title>Triagem Veterinária</title>
 <link rel="stylesheet" href="style.css">
 
 <style>
+
 body{
   font-family: Arial, sans-serif;
   background:#DCEEFF;
@@ -21,6 +23,74 @@ body{
   border-radius:15px;
   box-shadow:0 5px 20px rgba(0,0,0,0.1);
 }
+
+h2{
+  text-align:center;
+  color:#2C5D8A;
+  margin-bottom:25px;
+}
+
+h3{
+  color:#2C5D8A;
+  margin-top:25px;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  box-sizing:border-box;
+  padding:12px;
+  margin-top:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-size:15px;
+}
+
+textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+button{
+  width:100%;
+  padding:13px;
+  margin-top:20px;
+  background:#5B9BD5;
+  color:white;
+  border:none;
+  border-radius:8px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#468CC7;
+}
+
+#resultado{
+  margin-top:20px;
+  padding:15px;
+  border-radius:8px;
+  font-weight:bold;
+  text-align:center;
+}
+
+.verde{
+  background:#2ecc71;
+  color:white;
+}
+
+.amarelo{
+  background:#f1c40f;
+  color:#333;
+}
+
+.vermelho{
+  background:#e74c3c;
+  color:white;
+}
+
 </style>
 
 </head>
@@ -29,48 +99,399 @@ body{
 
 <div class="container">
 
-<h2 style="text-align:center; color:#2C5D8A;">
-🏥 Triagem Hospitalar
-</h2>
+<h2>🐾 Triagem Veterinária</h2>
 
-<input id="nome" placeholder="Nome">
+<h3>🐶 Dados do Animal</h3>
 
-<select id="sintoma">
+<input
+  id="nomeAnimal"
+  placeholder="Nome do animal"
+>
 
-<option value="">Selecione</option>
-<option value="dor_leve">Dor leve</option>
-<option value="resfriado">Resfriado</option>
-<option value="coriza">Coriza</option>
-<option value="tosse">Tosse</option>
-<option value="febre">Febre</option>
-<option value="vomito">Vômito</option>
-<option value="diarreia">Diarreia</option>
-<option value="falta_ar_moderada">Falta de ar moderada</option>
-<option value="falta_ar_grave">Falta de ar grave</option>
-<option value="infarto">Suspeita de infarto</option>
-<option value="avc">Suspeita de AVC</option>
-<option value="convulsao">Convulsão</option>
-<option value="hemorragia">Hemorragia</option>
+<select id="especie">
+
+  <option value="">
+    Selecione a espécie
+  </option>
+
+  <option value="Cachorro">
+    🐶 Cachorro
+  </option>
+
+  <option value="Gato">
+    🐱 Gato
+  </option>
+
+  <option value="Coelho">
+    🐰 Coelho
+  </option>
+
+  <option value="Ave">
+    🦜 Ave
+  </option>
+
+  <option value="Outro">
+    🐾 Outro
+  </option>
+
+</select>
+
+<select id="raca">
+
+  <option value="">
+    Selecione a raça
+  </option>
+
+  <option>Labrador</option>
+  <option>Golden Retriever</option>
+  <option>Poodle</option>
+  <option>Shih-tzu</option>
+  <option>Yorkshire</option>
+  <option>Bulldog Francês</option>
+  <option>Pastor Alemão</option>
+  <option>Rottweiler</option>
+  <option>Pinscher</option>
+  <option>Chihuahua</option>
+  <option>Dachshund</option>
+  <option>Beagle</option>
+  <option>Husky Siberiano</option>
+  <option>Border Collie</option>
+  <option>Vira-lata (SRD)</option>
+  <option>Outra</option>
 
 </select>
 
 <input
-id="temp"
-type="number"
-placeholder="Temperatura">
+  id="dataNascimento"
+  type="date"
+>
+
+<select id="sexo">
+
+  <option value="">
+    Selecione o sexo
+  </option>
+
+  <option value="Macho">
+    Macho
+  </option>
+
+  <option value="Fêmea">
+    Fêmea
+  </option>
+
+</select>
 
 <input
-id="alergia"
-placeholder="Alergias">
+  id="peso"
+  type="number"
+  step="0.1"
+  placeholder="Peso (kg)"
+>
+
+<select id="cor">
+
+  <option value="">
+    Selecione a cor do pelo
+  </option>
+
+  <option>Preto</option>
+  <option>Branco</option>
+  <option>Marrom</option>
+  <option>Caramelo</option>
+  <option>Cinza</option>
+  <option>Bege</option>
+  <option>Dourado</option>
+  <option>Creme</option>
+  <option>Preto e branco</option>
+  <option>Marrom e branco</option>
+  <option>Tricolor</option>
+  <option>Outra</option>
+
+</select>
+
+<select id="tipoSanguineo">
+
+  <option value="">
+    Tipo sanguíneo
+  </option>
+
+  <option value="DEA 1 positivo">
+    DEA 1 positivo
+  </option>
+
+  <option value="DEA 1 negativo">
+    DEA 1 negativo
+  </option>
+
+  <option value="Desconhecido">
+    Desconhecido
+  </option>
+
+</select>
+
+<h3>🩺 Informações de Saúde</h3>
+
+<select id="sintoma">
+
+  <option value="">
+    Selecione o problema
+  </option>
+
+  <option value="dor">
+    Dor
+  </option>
+
+  <option value="febre">
+    Febre
+  </option>
+
+  <option value="vomito">
+    Vômito
+  </option>
+
+  <option value="diarreia">
+    Diarreia
+  </option>
+
+  <option value="falta_ar">
+    Dificuldade para respirar
+  </option>
+
+  <option value="convulsao">
+    Convulsão
+  </option>
+
+  <option value="hemorragia">
+    Hemorragia
+  </option>
+
+  <option value="acidente">
+    Acidente
+  </option>
+
+  <option value="outro">
+    Outro
+  </option>
+
+</select>
+
+<select id="alergia">
+
+  <option value="">
+    Selecione a alergia
+  </option>
+
+  <option value="Nenhuma">
+    Nenhuma alergia conhecida
+  </option>
+
+  <option value="Ração">
+    Ração
+  </option>
+
+  <option value="Frango">
+    Frango
+  </option>
+
+  <option value="Carne bovina">
+    Carne bovina
+  </option>
+
+  <option value="Leite">
+    Leite
+  </option>
+
+  <option value="Pulgas">
+    Pulgas
+  </option>
+
+  <option value="Medicamentos">
+    Medicamentos
+  </option>
+
+  <option value="Pólen">
+    Pólen
+  </option>
+
+  <option value="Poeira">
+    Poeira
+  </option>
+
+  <option value="Plantas">
+    Plantas
+  </option>
+
+  <option value="Outra">
+    Outra
+  </option>
+
+</select>
+
+<input
+  id="temp"
+  type="number"
+  step="0.1"
+  placeholder="Temperatura (°C)"
+>
 
 <textarea
-id="observacao"
-placeholder="Observações"></textarea>
+  id="observacao"
+  placeholder="Observações">
+</textarea>
 
 <div id="resultado"></div>
 
 <button onclick="salvar()">
-Salvar Triagem
+  🐾 Salvar Triagem
 </button>
 
 </div>
+
+<script>
+
+function classificarRisco(sintoma, temperatura){
+
+  const vermelhos = [
+    "convulsao",
+    "hemorragia",
+    "falta_ar"
+  ];
+
+  const amarelos = [
+    "febre",
+    "vomito",
+    "diarreia",
+    "acidente"
+  ];
+
+  if(temperatura >= 39){
+    return "vermelho";
+  }
+
+  if(vermelhos.includes(sintoma)){
+    return "vermelho";
+  }
+
+  if(amarelos.includes(sintoma)){
+    return "amarelo";
+  }
+
+  return "verde";
+}
+
+
+function salvar(){
+
+  const dados = {
+
+    nomeAnimal:
+      document.getElementById("nomeAnimal").value,
+
+    especie:
+      document.getElementById("especie").value,
+
+    raca:
+      document.getElementById("raca").value,
+
+    dataNascimento:
+      document.getElementById("dataNascimento").value,
+
+    sexo:
+      document.getElementById("sexo").value,
+
+    peso:
+      document.getElementById("peso").value,
+
+    cor:
+      document.getElementById("cor").value,
+
+    tipoSanguineo:
+      document.getElementById("tipoSanguineo").value,
+
+    sintoma:
+      document.getElementById("sintoma").value,
+
+    temperatura:
+      Number(document.getElementById("temp").value),
+
+    alergia:
+      document.getElementById("alergia").value,
+
+    observacao:
+      document.getElementById("observacao").value
+
+  };
+
+
+  const risco =
+    classificarRisco(
+      dados.sintoma,
+      dados.temperatura
+    );
+
+
+  dados.risco = risco;
+
+
+  fetch("http://localhost:3000/triagem", {
+
+    method:"POST",
+
+    headers:{
+      "Content-Type":"application/json"
+    },
+
+    body:JSON.stringify(dados)
+
+  })
+
+  .then(async resposta => {
+
+    const texto =
+      await resposta.text();
+
+    if(!resposta.ok){
+      throw new Error(texto);
+    }
+
+    return texto
+      ? JSON.parse(texto)
+      : {};
+
+  })
+
+  .then(() => {
+
+    const resultado =
+      document.getElementById("resultado");
+
+    resultado.className = risco;
+
+    resultado.innerHTML =
+      "Classificação de risco: " +
+      risco.toUpperCase();
+
+    alert(
+      "🐶✅ Triagem salva com sucesso!"
+    );
+
+  })
+
+  .catch(erro => {
+
+    console.error(erro);
+
+    alert(
+      "❌ Erro ao salvar a triagem.\n\n" +
+      erro.message
+    );
+
+  });
+
+}
+
+</script>
+
+</body>
+</html>
