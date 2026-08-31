@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Atendimento Veterinário</title>
+
 <link rel="stylesheet" href="style.css">
 
 <style>
@@ -20,7 +21,7 @@ body {
 
 .container {
     width: 90%;
-    max-width: 600px;
+    max-width: 650px;
     margin: 40px auto;
     background: white;
     padding: 30px;
@@ -64,7 +65,7 @@ h3 {
 label {
     color: #2C5D8A;
     font-weight: bold;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 /* TELEFONE */
@@ -75,19 +76,17 @@ label {
 }
 
 .telefone select {
-    width: 160px !important;
-}
-
-.telefone input {
-    min-width: 0;
+    width: 150px !important;
 }
 
 #ddd {
     width: 80px;
+    flex-shrink: 0;
 }
 
 #telefone {
     flex: 1;
+    min-width: 0;
 }
 
 button {
@@ -107,6 +106,7 @@ button:hover {
 }
 
 </style>
+
 </head>
 
 <body>
@@ -117,122 +117,278 @@ button:hover {
 
 <div class="formulario">
 
+<!-- ========================= -->
+<!-- DADOS DO ANIMAL -->
+<!-- ========================= -->
+
 <h3>🐾 Dados do Animal</h3>
 
-<input id="nomeAnimal" placeholder="Nome do animal">
+<input
+    id="nomeAnimal"
+    type="text"
+    maxlength="50"
+    placeholder="Nome do animal"
+>
 
 <label>Espécie</label>
 
 <select id="especie">
-    <option value="">Selecione a espécie</option>
-    <option value="Cachorro">🐶 Cachorro</option>
-    <option value="Gato">🐱 Gato</option>
-    <option value="Coelho">🐰 Coelho</option>
-    <option value="Ave">🦜 Ave</option>
-    <option value="Outro">🐾 Outro</option>
+
+    <option value="">
+        Selecione a espécie
+    </option>
+
+    <option value="Cachorro">
+        🐶 Cachorro
+    </option>
+
+    <option value="Gato">
+        🐱 Gato
+    </option>
+
+    <option value="Coelho">
+        🐰 Coelho
+    </option>
+
+    <option value="Ave">
+        🦜 Ave
+    </option>
+
+    <option value="Outro">
+        🐾 Outro
+    </option>
+
 </select>
+
 
 <label>Raça</label>
 
 <select id="raca">
-    <option value="">Selecione a raça</option>
-    <option value="Labrador">Labrador</option>
-    <option value="Golden Retriever">Golden Retriever</option>
-    <option value="Poodle">Poodle</option>
-    <option value="Shih-tzu">Shih-tzu</option>
-    <option value="Yorkshire">Yorkshire</option>
-    <option value="Bulldog Francês">Bulldog Francês</option>
-    <option value="Bulldog Inglês">Bulldog Inglês</option>
-    <option value="Pastor Alemão">Pastor Alemão</option>
-    <option value="Rottweiler">Rottweiler</option>
-    <option value="Pinscher">Pinscher</option>
-    <option value="Chihuahua">Chihuahua</option>
-    <option value="Dachshund">Dachshund</option>
-    <option value="Beagle">Beagle</option>
-    <option value="Husky Siberiano">Husky Siberiano</option>
-    <option value="Border Collie">Border Collie</option>
-    <option value="Vira-lata (SRD)">Vira-lata (SRD)</option>
-    <option value="Outra">Outra</option>
+
+    <option value="">
+        Selecione a raça
+    </option>
+
+    <option>Labrador</option>
+    <option>Golden Retriever</option>
+    <option>Poodle</option>
+    <option>Shih-tzu</option>
+    <option>Yorkshire</option>
+    <option>Bulldog Francês</option>
+    <option>Bulldog Inglês</option>
+    <option>Pastor Alemão</option>
+    <option>Rottweiler</option>
+    <option>Pinscher</option>
+    <option>Chihuahua</option>
+    <option>Dachshund</option>
+    <option>Beagle</option>
+    <option>Husky Siberiano</option>
+    <option>Border Collie</option>
+    <option>Vira-lata (SRD)</option>
+    <option>Outra</option>
+
 </select>
 
+
 <label>Data de nascimento</label>
-<input id="dataNascimento" type="date">
+
+<input
+    id="dataNascimento"
+    type="date"
+>
+
 
 <label>Sexo</label>
 
 <select id="sexo">
-    <option value="">Selecione o sexo</option>
-    <option value="Macho">Macho</option>
-    <option value="Fêmea">Fêmea</option>
+
+    <option value="">
+        Selecione o sexo
+    </option>
+
+    <option value="Macho">
+        Macho
+    </option>
+
+    <option value="Fêmea">
+        Fêmea
+    </option>
+
 </select>
+
+
+<label>Peso</label>
 
 <input
     id="peso"
     type="number"
+    min="0"
     step="0.1"
-    placeholder="Peso (kg)"
+    placeholder="Peso em kg"
 >
+
 
 <label>Cor do pelo</label>
 
 <select id="cor">
-    <option value="">Selecione a cor do pelo</option>
-    <option value="Preto">⚫ Preto</option>
-    <option value="Branco">⚪ Branco</option>
-    <option value="Marrom">🟤 Marrom</option>
-    <option value="Caramelo">Caramelo</option>
-    <option value="Cinza">🩶 Cinza</option>
-    <option value="Bege">Bege</option>
-    <option value="Dourado">Dourado</option>
-    <option value="Creme">Creme</option>
-    <option value="Preto e branco">Preto e branco</option>
-    <option value="Marrom e branco">Marrom e branco</option>
-    <option value="Tricolor">Tricolor</option>
-    <option value="Outra">Outra</option>
+
+    <option value="">
+        Selecione a cor do pelo
+    </option>
+
+    <option>Preto</option>
+    <option>Branco</option>
+    <option>Marrom</option>
+    <option>Caramelo</option>
+    <option>Cinza</option>
+    <option>Bege</option>
+    <option>Dourado</option>
+    <option>Creme</option>
+    <option>Preto e branco</option>
+    <option>Marrom e branco</option>
+    <option>Tricolor</option>
+    <option>Outra</option>
+
 </select>
+
 
 <label>Tipo sanguíneo</label>
 
 <select id="tipoSanguineo">
-    <option value="">Selecione o tipo sanguíneo</option>
-    <option value="DEA 1 positivo">DEA 1 positivo</option>
-    <option value="DEA 1 negativo">DEA 1 negativo</option>
-    <option value="Desconhecido">Desconhecido</option>
+
+    <option value="">
+        Selecione o tipo sanguíneo
+    </option>
+
+    <option value="DEA 1 positivo">
+        DEA 1 positivo
+    </option>
+
+    <option value="DEA 1 negativo">
+        DEA 1 negativo
+    </option>
+
+    <option value="Desconhecido">
+        Desconhecido
+    </option>
+
 </select>
 
+
 <label>Foto do animal</label>
-<input type="file" id="foto">
+
+<input
+    type="file"
+    id="foto"
+    accept="image/*"
+>
+
+
+<!-- ========================= -->
+<!-- DADOS DO TUTOR -->
+<!-- ========================= -->
 
 <h3>👤 Dados do Tutor</h3>
 
-<input id="nomeTutor" placeholder="Nome do tutor">
+<input
+    id="nomeTutor"
+    type="text"
+    maxlength="100"
+    placeholder="Nome completo do tutor"
+>
 
-<input id="documentoTutor" placeholder="CPF ou documento">
+
+<label>CPF</label>
+
+<input
+    id="documentoTutor"
+    type="text"
+    inputmode="numeric"
+    maxlength="11"
+    placeholder="CPF (11 números)"
+>
+
 
 <label>Telefone</label>
 
 <div class="telefone">
 
     <select id="codigoPais">
-        <option value="+55">🇧🇷 +55</option>
-        <option value="+1">🇺🇸 +1</option>
-        <option value="+1">🇨🇦 +1</option>
-        <option value="+52">🇲🇽 +52</option>
-        <option value="+54">🇦🇷 +54</option>
-        <option value="+56">🇨🇱 +56</option>
-        <option value="+57">🇨🇴 +57</option>
-        <option value="+351">🇵🇹 +351</option>
-        <option value="+34">🇪🇸 +34</option>
-        <option value="+33">🇫🇷 +33</option>
-        <option value="+49">🇩🇪 +49</option>
-        <option value="+39">🇮🇹 +39</option>
-        <option value="+41">🇨🇭 +41</option>
-        <option value="+44">🇬🇧 +44</option>
-        <option value="+81">🇯🇵 +81</option>
-        <option value="+86">🇨🇳 +86</option>
-        <option value="+61">🇦🇺 +61</option>
-        <option value="+91">🇮🇳 +91</option>
+
+        <option value="+55">
+            🇧🇷 Brasil +55
+        </option>
+
+        <option value="+1">
+            🇺🇸 Estados Unidos +1
+        </option>
+
+        <option value="+1">
+            🇨🇦 Canadá +1
+        </option>
+
+        <option value="+52">
+            🇲🇽 México +52
+        </option>
+
+        <option value="+54">
+            🇦🇷 Argentina +54
+        </option>
+
+        <option value="+56">
+            🇨🇱 Chile +56
+        </option>
+
+        <option value="+57">
+            🇨🇴 Colômbia +57
+        </option>
+
+        <option value="+351">
+            🇵🇹 Portugal +351
+        </option>
+
+        <option value="+34">
+            🇪🇸 Espanha +34
+        </option>
+
+        <option value="+33">
+            🇫🇷 França +33
+        </option>
+
+        <option value="+49">
+            🇩🇪 Alemanha +49
+        </option>
+
+        <option value="+39">
+            🇮🇹 Itália +39
+        </option>
+
+        <option value="+41">
+            🇨🇭 Suíça +41
+        </option>
+
+        <option value="+44">
+            🇬🇧 Reino Unido +44
+        </option>
+
+        <option value="+81">
+            🇯🇵 Japão +81
+        </option>
+
+        <option value="+86">
+            🇨🇳 China +86
+        </option>
+
+        <option value="+61">
+            🇦🇺 Austrália +61
+        </option>
+
+        <option value="+91">
+            🇮🇳 Índia +91
+        </option>
+
     </select>
+
 
     <input
         id="ddd"
@@ -241,6 +397,7 @@ button:hover {
         maxlength="5"
         placeholder="DDD"
     >
+
 
     <input
         id="telefone"
@@ -252,67 +409,147 @@ button:hover {
 
 </div>
 
+
 <input
     id="emailTutor"
     type="email"
+    maxlength="100"
     placeholder="E-mail do tutor"
 >
 
-<input id="endereco" placeholder="Endereço">
+
+<input
+    id="endereco"
+    type="text"
+    maxlength="150"
+    placeholder="Endereço completo"
+>
+
 
 <input
     id="contatoEmergencia"
+    type="text"
+    maxlength="20"
     placeholder="Contato de emergência"
 >
+
+
+<!-- ========================= -->
+<!-- INFORMAÇÕES DE SAÚDE -->
+<!-- ========================= -->
 
 <h3>🩺 Informações de Saúde</h3>
 
 <label>Alergias</label>
 
 <select id="alergias">
-    <option value="">Selecione uma alergia</option>
-    <option value="Nenhuma">Nenhuma alergia conhecida</option>
-    <option value="Ração">Ração</option>
-    <option value="Frango">Frango</option>
-    <option value="Carne bovina">Carne bovina</option>
-    <option value="Leite">Leite</option>
-    <option value="Pulgas">Pulgas</option>
-    <option value="Produtos de limpeza">Produtos de limpeza</option>
-    <option value="Medicamentos">Medicamentos</option>
-    <option value="Pólen">Pólen</option>
-    <option value="Poeira">Poeira</option>
-    <option value="Plantas">Plantas</option>
-    <option value="Outra">Outra</option>
+
+    <option value="">
+        Selecione uma alergia
+    </option>
+
+    <option value="Nenhuma">
+        Nenhuma alergia conhecida
+    </option>
+
+    <option value="Ração">
+        Ração
+    </option>
+
+    <option value="Frango">
+        Frango
+    </option>
+
+    <option value="Carne bovina">
+        Carne bovina
+    </option>
+
+    <option value="Leite">
+        Leite
+    </option>
+
+    <option value="Pulgas">
+        Pulgas
+    </option>
+
+    <option value="Produtos de limpeza">
+        Produtos de limpeza
+    </option>
+
+    <option value="Medicamentos">
+        Medicamentos
+    </option>
+
+    <option value="Pólen">
+        Pólen
+    </option>
+
+    <option value="Poeira">
+        Poeira
+    </option>
+
+    <option value="Plantas">
+        Plantas
+    </option>
+
+    <option value="Outra">
+        Outra
+    </option>
+
 </select>
+
 
 <textarea
     id="observacoes"
-    placeholder="Observações"
-></textarea>
+    maxlength="500"
+    placeholder="Observações sobre o animal">
+</textarea>
+
+
+<!-- ========================= -->
+<!-- TIPO DE ATENDIMENTO -->
+<!-- ========================= -->
 
 <h3>💳 Tipo de Atendimento</h3>
 
 <select id="tipo">
-    <option value="">Selecione o tipo de atendimento</option>
-    <option value="Convenio">Convênio</option>
-    <option value="Particular">Particular</option>
+
+    <option value="">
+        Selecione o tipo de atendimento
+    </option>
+
+    <option value="Convenio">
+        Convênio
+    </option>
+
+    <option value="Particular">
+        Particular
+    </option>
+
 </select>
+
 
 <button onclick="cadastrar()">
     🐾 Cadastrar Animal
 </button>
 
 </div>
+
 </div>
+
 
 <script>
 
-function cadastrar(){
+function cadastrar() {
+
+    /* ========================= */
+    /* PEGAR OS DADOS */
+    /* ========================= */
 
     const dados = {
 
         nomeAnimal:
-            document.getElementById("nomeAnimal").value,
+            document.getElementById("nomeAnimal").value.trim(),
 
         especie:
             document.getElementById("especie").value,
@@ -336,87 +573,195 @@ function cadastrar(){
             document.getElementById("tipoSanguineo").value,
 
         nomeTutor:
-            document.getElementById("nomeTutor").value,
+            document.getElementById("nomeTutor").value.trim(),
 
         documentoTutor:
-            document.getElementById("documentoTutor").value,
+            document.getElementById("documentoTutor").value
+            .replace(/\D/g, ""),
 
         codigoPais:
             document.getElementById("codigoPais").value,
 
         ddd:
-            document.getElementById("ddd").value,
+            document.getElementById("ddd").value
+            .replace(/\D/g, ""),
 
         telefone:
-            document.getElementById("telefone").value,
+            document.getElementById("telefone").value
+            .replace(/\D/g, ""),
 
         emailTutor:
-            document.getElementById("emailTutor").value,
+            document.getElementById("emailTutor").value.trim(),
 
         endereco:
-            document.getElementById("endereco").value,
+            document.getElementById("endereco").value.trim(),
 
         contatoEmergencia:
-            document.getElementById("contatoEmergencia").value,
+            document.getElementById("contatoEmergencia").value.trim(),
 
         alergias:
             document.getElementById("alergias").value,
 
         observacoes:
-            document.getElementById("observacoes").value,
+            document.getElementById("observacoes").value.trim(),
 
         tipo:
             document.getElementById("tipo").value
 
     };
 
-    /* Verifica o DDD/código regional */
 
-    if (dados.ddd.length > 5) {
-        alert("⚠️ O DDD/código regional pode ter no máximo 5 números.");
+    /* ========================= */
+    /* VALIDAÇÕES */
+    /* ========================= */
+
+    if (!dados.nomeAnimal) {
+
+        alert("⚠️ Informe o nome do animal.");
+
         return;
     }
 
-    /* Verifica o telefone */
 
-    if (dados.telefone.length < 6 || dados.telefone.length > 15) {
-        alert("⚠️ O telefone deve ter entre 6 e 15 números.");
+    if (!dados.especie) {
+
+        alert("⚠️ Selecione a espécie.");
+
         return;
     }
 
-    fetch("http://localhost:3000/atendimento", {
 
-        method: "POST",
+    if (!dados.raca) {
 
-        headers: {
-            "Content-Type": "application/json"
-        },
+        alert("⚠️ Selecione a raça.");
 
-        body: JSON.stringify(dados)
+        return;
+    }
 
-    })
+
+    if (!dados.sexo) {
+
+        alert("⚠️ Selecione o sexo.");
+
+        return;
+    }
+
+
+    if (!dados.nomeTutor) {
+
+        alert("⚠️ Informe o nome do tutor.");
+
+        return;
+    }
+
+
+    /* ========================= */
+    /* VALIDAÇÃO DO CPF */
+    /* ========================= */
+
+    if (dados.documentoTutor.length !== 11) {
+
+        alert(
+            "⚠️ O CPF deve ter exatamente 11 números."
+        );
+
+        return;
+    }
+
+
+    /* ========================= */
+    /* VALIDAÇÃO DO DDD */
+    /* ========================= */
+
+    if (
+        dados.ddd.length < 1 ||
+        dados.ddd.length > 5
+    ) {
+
+        alert(
+            "⚠️ O DDD/código regional deve ter de 1 a 5 números."
+        );
+
+        return;
+    }
+
+
+    /* ========================= */
+    /* VALIDAÇÃO DO TELEFONE */
+    /* ========================= */
+
+    if (
+        dados.telefone.length < 6 ||
+        dados.telefone.length > 15
+    ) {
+
+        alert(
+            "⚠️ O telefone deve ter entre 6 e 15 números."
+        );
+
+        return;
+    }
+
+
+    /* ========================= */
+    /* ENVIO PARA O SERVIDOR */
+    /* ========================= */
+
+    fetch(
+        "http://localhost:3000/atendimento",
+        {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type":
+                    "application/json"
+            },
+
+            body:
+                JSON.stringify(dados)
+
+        }
+    )
 
     .then(async resposta => {
 
-        const texto = await resposta.text();
+        const texto =
+            await resposta.text();
 
         if (!resposta.ok) {
-            throw new Error(texto);
+
+            throw new Error(
+                texto ||
+                "Erro no servidor."
+            );
+
         }
 
-        return texto ? JSON.parse(texto) : {};
+        return texto
+            ? JSON.parse(texto)
+            : {};
 
     })
 
-    .then(data => {
+    .then(() => {
 
-        alert("🐶✅ Animal cadastrado e enviado para a triagem!");
+        alert(
+            "🐶✅ Animal cadastrado com sucesso!"
+        );
+
+        document
+            .querySelector(".formulario")
+            .reset();
 
     })
 
     .catch(erro => {
 
-        console.error("Erro completo:", erro);
+        console.error(
+            "Erro completo:",
+            erro
+        );
 
         alert(
             "❌ Erro ao cadastrar o animal.\n\n" +
@@ -430,4 +775,5 @@ function cadastrar(){
 </script>
 
 </body>
+
 </html>
