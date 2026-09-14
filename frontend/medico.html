@@ -107,6 +107,72 @@
       border-radius: 9px;
     }
 
+    /* BOTÕES DA CONSULTA */
+
+    .botoes-consulta {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn-pdf {
+      background: #2C5D8A;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+
+    .btn-pdf:hover {
+      background: #21496d;
+    }
+
+    .btn-alta {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+
+    .btn-alta:hover {
+      background: #1e7e34;
+    }
+
+    /* ESCONDE BOTÕES AO GERAR PDF */
+
+    @media print {
+
+      body {
+        background: white !important;
+      }
+
+      .btn-abrir-tv,
+      .btn-tv,
+      .botoes-consulta,
+      button {
+        display: none !important;
+      }
+
+      .container {
+        box-shadow: none;
+        border-radius: 0;
+        width: 100%;
+      }
+
+      input,
+      select,
+      textarea {
+        border: 1px solid #999;
+      }
+
+    }
+
   </style>
 </head>
 
@@ -179,16 +245,32 @@
     placeholder="Observações">
   </textarea>
 
-<header>
-        <h1>
-      
-            <button onclick="window.print()" style="margin-top: 1rem; padding:
-            10px 20px; font-weight: bold; cursor: pointer; border-radius: 8px;
-            border: none; background: #2C5D8A; color: var(--primary-color);">⬇️
-            Baixar PDF</button>
-        </h1>
-    </header>
-  
+
+  <!-- BOTÕES PDF E ALTA -->
+
+  <div class="botoes-consulta">
+
+    <button
+      class="btn-pdf"
+      onclick="baixarPDF()">
+
+      📄 Baixar PDF
+
+    </button>
+
+    <button
+      class="btn-alta"
+      onclick="darAlta()">
+
+      🏠 Dar Alta
+
+    </button>
+
+  </div>
+
+
+  <br>
+
   <button onclick="salvar()">
     🐾 Salvar Consulta
   </button>
@@ -287,6 +369,7 @@ function carregar() {
 
 }
 
+
 function chamarNaTV(nome) {
 
   const consultorio =
@@ -328,6 +411,7 @@ function chamarNaTV(nome) {
 
 }
 
+
 function selecionar(index) {
 
   const t =
@@ -349,6 +433,7 @@ function selecionar(index) {
   }
 
 }
+
 
 function carregarMedicacoes() {
 
@@ -380,6 +465,9 @@ function carregarMedicacoes() {
     });
 
 }
+
+
+/* SALVAR CONSULTA */
 
 function salvar() {
 
@@ -447,6 +535,115 @@ function salvar() {
   });
 
 }
+
+
+/* BAIXAR PDF */
+
+function baixarPDF() {
+
+  const paciente =
+    document.getElementById("paciente").value;
+
+  if (!paciente) {
+
+    alert(
+      "⚠️ Selecione um paciente antes de baixar o PDF."
+    );
+
+    return;
+  }
+
+  window.print();
+
+}
+
+
+/* DAR ALTA */
+
+function darAlta() {
+
+  const paciente =
+    document.getElementById("paciente").value;
+
+  if (!paciente) {
+
+    alert(
+      "⚠️ Selecione um paciente antes de dar alta."
+    );
+
+    return;
+  }
+
+  const confirmar = confirm(
+    "🏠 Deseja realmente dar alta para " +
+    paciente +
+    "?"
+  );
+
+  if (!confirmar) {
+    return;
+  }
+
+  fetch("/alta", {
+
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({
+
+      paciente: paciente
+
+    })
+
+  })
+
+  .then(r => {
+
+    if (!r.ok) {
+      throw new Error("Erro ao dar alta");
+    }
+
+    return r.json();
+
+  })
+
+  .then(() => {
+
+    alert(
+      "🏠 Alta realizada com sucesso para " +
+      paciente +
+      "!"
+    );
+
+    document.getElementById("paciente").value = "";
+
+    document.getElementById("diagnostico").value = "";
+
+    document.getElementById("medicacao").value = "";
+
+    document.getElementById("obs").value = "";
+
+    carregar();
+
+  })
+
+  .catch(error => {
+
+    console.error(error);
+
+    alert(
+      "❌ Erro ao dar alta no paciente."
+    );
+
+  });
+
+}
+
+
+/* INICIALIZAÇÃO */
 
 carregar();
 
