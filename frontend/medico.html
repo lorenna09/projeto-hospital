@@ -7,9 +7,6 @@
 
   <link rel="stylesheet" href="css/style.css">
 
-  <!-- Biblioteca para gerar PDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
   <style>
 
     body {
@@ -25,7 +22,10 @@
       padding: 25px;
     }
 
-    h2,
+    h2 {
+      color: #2C5D8A;
+    }
+
     h3 {
       color: #2C5D8A;
     }
@@ -103,32 +103,18 @@
       box-sizing: border-box;
     }
 
-    textarea {
-      width: 100%;
-      min-height: 100px;
-    }
-
     button {
       border-radius: 9px;
     }
 
-    /* Área da consulta */
+    /* BOTÕES DA CONSULTA */
 
-    #consultaPDF {
-      background: #F7FBFF;
-      border: 1px solid #D5E8F7;
-      border-radius: 15px;
-      padding: 20px;
-      margin-top: 15px;
+    .botoes-consulta {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
     }
-
-    #consultaPDF input,
-    #consultaPDF select {
-      width: 100%;
-      margin-bottom: 10px;
-    }
-
-    /* Botão PDF */
 
     .btn-pdf {
       background: #2C5D8A;
@@ -138,14 +124,27 @@
       font-weight: bold;
       cursor: pointer;
       border-radius: 8px;
-      margin-top: 10px;
     }
 
     .btn-pdf:hover {
       background: #21496d;
     }
 
-    /* Impressão */
+    .btn-alta {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+
+    .btn-alta:hover {
+      background: #1e7e34;
+    }
+
+    /* ESCONDE BOTÕES AO GERAR PDF */
 
     @media print {
 
@@ -153,27 +152,23 @@
         background: white !important;
       }
 
-      body * {
-        visibility: hidden;
-      }
-
-      #consultaPDF,
-      #consultaPDF * {
-        visibility: visible;
-      }
-
-      #consultaPDF {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        border: none;
-        box-shadow: none;
-        background: white;
-      }
-
-      #consultaPDF button {
+      .btn-abrir-tv,
+      .btn-tv,
+      .botoes-consulta,
+      button {
         display: none !important;
+      }
+
+      .container {
+        box-shadow: none;
+        border-radius: 0;
+        width: 100%;
+      }
+
+      input,
+      select,
+      textarea {
+        border: 1px solid #999;
       }
 
     }
@@ -184,8 +179,6 @@
 <body>
 
 <div class="container">
-
-  <!-- CABEÇALHO -->
 
   <div style="
     display:flex;
@@ -208,9 +201,6 @@
 
   </div>
 
-
-  <!-- CONSULTÓRIO -->
-
   <div class="consultorio-input">
 
     <label>Meu Consultório:</label>
@@ -227,81 +217,70 @@
 
   </div>
 
-
-  <!-- FILA DE TRIAGEM -->
-
   <div id="triagens"></div>
-
 
   <hr>
 
+  <h3>🩺 Consulta Veterinária</h3>
 
-  <!-- CONSULTA VETERINÁRIA -->
+  <input
+    id="paciente"
+    placeholder="Paciente"
+    readonly
+  >
 
-  <div id="consultaPDF">
+  <input
+    id="diagnostico"
+    placeholder="Diagnóstico"
+  >
 
-    <h3>🩺 Consulta Veterinária</h3>
+  <select id="medicacao">
+    <option value="">
+      Selecione a medicação
+    </option>
+  </select>
 
-    <input
-      id="paciente"
-      placeholder="Paciente"
-      readonly
-    >
-
-    <input
-      id="diagnostico"
-      placeholder="Diagnóstico"
-    >
-
-    <select id="medicacao">
-
-      <option value="">
-        Selecione a medicação
-      </option>
-
-    </select>
-
-    <textarea
-      id="obs"
-      placeholder="Observações"></textarea>
+  <textarea
+    id="obs"
+    placeholder="Observações">
+  </textarea>
 
 
-    <!-- BOTÕES -->
+  <!-- BOTÕES PDF E ALTA -->
 
-    <div style="
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    ">
+  <div class="botoes-consulta">
 
-      <button onclick="salvar()">
-        🐾 Salvar Consulta
-      </button>
+    <button
+        onclick="window.print()" style="margin-top: 1rem; padding:
+            10px 20px; font-weight: bold; cursor: pointer; border-radius: 8px;
+            border: none; background: #2C5D8A; color: var(--primary-color);">
+            Baixar PDF
 
-      <button
-        class="btn-pdf"
-        onclick="baixarPDF()">
+      
+    </button>
 
-        📄 Baixar PDF
+    <button
+      class="btn-alta"
+      onclick="darAlta()">
 
-      </button>
+      🏠 Dar Alta
 
-    </div>
+    </button>
 
   </div>
 
-</div>
 
+  <br>
+
+  <button onclick="salvar()">
+    🐾 Salvar Consulta
+  </button>
+
+</div>
 
 <script>
 
 let triagensCarregadas = [];
-
-
-/* =========================
-   CARREGAR TRIAGENS
-========================= */
 
 function carregar() {
 
@@ -387,23 +366,10 @@ function carregar() {
 
       });
 
-    })
-
-    .catch(error => {
-
-      console.error(
-        "Erro ao carregar triagens:",
-        error
-      );
-
     });
 
 }
 
-
-/* =========================
-   CHAMAR NA TV
-========================= */
 
 function chamarNaTV(nome) {
 
@@ -447,10 +413,6 @@ function chamarNaTV(nome) {
 }
 
 
-/* =========================
-   SELECIONAR PACIENTE
-========================= */
-
 function selecionar(index) {
 
   const t =
@@ -462,10 +424,7 @@ function selecionar(index) {
   document.getElementById("obs").value =
     t.observacao || "";
 
-  if (
-    t.alergia &&
-    t.alergia !== "Nenhuma"
-  ) {
+  if (t.alergia && t.alergia !== "Nenhuma") {
 
     alert(
       "⚠️ Paciente possui alergia: " +
@@ -476,10 +435,6 @@ function selecionar(index) {
 
 }
 
-
-/* =========================
-   CARREGAR MEDICAÇÕES
-========================= */
 
 function carregarMedicacoes() {
 
@@ -513,9 +468,7 @@ function carregarMedicacoes() {
 }
 
 
-/* =========================
-   SALVAR CONSULTA
-========================= */
+/* SALVAR CONSULTA */
 
 function salvar() {
 
@@ -531,7 +484,6 @@ function salvar() {
   const obs =
     document.getElementById("obs").value;
 
-
   if (!paciente) {
 
     alert(
@@ -541,7 +493,6 @@ function salvar() {
     return;
   }
 
-
   if (!medicacao) {
 
     alert(
@@ -550,7 +501,6 @@ function salvar() {
 
     return;
   }
-
 
   fetch("/consulta", {
 
@@ -575,15 +525,109 @@ function salvar() {
 
   .then(() => {
 
-    alert(
-      "🐾 Consulta salva com sucesso!"
-    );
+    alert("🐾 Consulta salva com sucesso!");
 
     document.getElementById("diagnostico").value = "";
 
     document.getElementById("medicacao").value = "";
 
     document.getElementById("obs").value = "";
+
+  });
+
+}
+
+
+/* BAIXAR PDF */
+
+function baixarPDF() {
+
+  const paciente =
+    document.getElementById("paciente").value;
+
+  if (!paciente) {
+
+    alert(
+      "⚠️ Selecione um paciente antes de baixar o PDF."
+    );
+
+    return;
+  }
+
+  window.print();
+
+}
+
+
+/* DAR ALTA */
+
+function darAlta() {
+
+  const paciente =
+    document.getElementById("paciente").value;
+
+  if (!paciente) {
+
+    alert(
+      "⚠️ Selecione um paciente antes de dar alta."
+    );
+
+    return;
+  }
+
+  const confirmar = confirm(
+    "🏠 Deseja realmente dar alta para " +
+    paciente +
+    "?"
+  );
+
+  if (!confirmar) {
+    return;
+  }
+
+  fetch("/alta", {
+
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({
+
+      paciente: paciente
+
+    })
+
+  })
+
+  .then(r => {
+
+    if (!r.ok) {
+      throw new Error("Erro ao dar alta");
+    }
+
+    return r.json();
+
+  })
+
+  .then(() => {
+
+    alert(
+      "🏠 Alta realizada com sucesso para " +
+      paciente +
+      "!"
+    );
+
+    document.getElementById("paciente").value = "";
+
+    document.getElementById("diagnostico").value = "";
+
+    document.getElementById("medicacao").value = "";
+
+    document.getElementById("obs").value = "";
+
+    carregar();
 
   })
 
@@ -592,7 +636,7 @@ function salvar() {
     console.error(error);
 
     alert(
-      "❌ Erro ao salvar consulta."
+      "❌ Erro ao dar alta no paciente."
     );
 
   });
@@ -600,303 +644,13 @@ function salvar() {
 }
 
 
-/* =========================
-   BAIXAR PDF
-   SOMENTE CONSULTA
-========================= */
-
-function baixarPDF() {
-
-  const paciente =
-    document.getElementById("paciente").value;
-
-  const diagnostico =
-    document.getElementById("diagnostico").value;
-
-  const medicacao =
-    document.getElementById("medicacao").value;
-
-  const obs =
-    document.getElementById("obs").value;
-
-
-  if (!paciente) {
-
-    alert(
-      "⚠️ Selecione um paciente primeiro."
-    );
-
-    return;
-  }
-
-
-  const { jsPDF } = window.jspdf;
-
-  const doc = new jsPDF();
-
-
-  /* DATA E HORA */
-
-  const agora = new Date();
-
-  const data =
-    agora.toLocaleDateString("pt-BR");
-
-  const hora =
-    agora.toLocaleTimeString("pt-BR");
-
-
-  /* CABEÇALHO */
-
-  doc.setFillColor(
-    44,
-    93,
-    138
-  );
-
-  doc.rect(
-    0,
-    0,
-    210,
-    32,
-    "F"
-  );
-
-
-  doc.setTextColor(
-    255,
-    255,
-    255
-  );
-
-  doc.setFontSize(20);
-
-  doc.text(
-    "Painel Veterinário",
-    20,
-    21
-  );
-
-
-  /* TÍTULO */
-
-  doc.setTextColor(
-    0,
-    0,
-    0
-  );
-
-  doc.setFontSize(16);
-
-  doc.text(
-    "Consulta Veterinária",
-    20,
-    48
-  );
-
-
-  /* DATA */
-
-  doc.setFontSize(10);
-
-  doc.text(
-    "Data: " + data,
-    20,
-    58
-  );
-
-  doc.text(
-    "Hora: " + hora,
-    130,
-    58
-  );
-
-
-  /* LINHA */
-
-  doc.setDrawColor(
-    200,
-    200,
-    200
-  );
-
-  doc.line(
-    20,
-    64,
-    190,
-    64
-  );
-
-
-  let y = 80;
-
-
-  /* PACIENTE */
-
-  doc.setFontSize(12);
-
-  doc.setFont(undefined, "bold");
-
-  doc.text(
-    "Paciente:",
-    20,
-    y
-  );
-
-  doc.setFont(undefined, "normal");
-
-  doc.text(
-    paciente,
-    55,
-    y
-  );
-
-
-  y += 20;
-
-
-  /* DIAGNÓSTICO */
-
-  doc.setFont(undefined, "bold");
-
-  doc.text(
-    "Diagnóstico:",
-    20,
-    y
-  );
-
-  doc.setFont(undefined, "normal");
-
-  y += 8;
-
-  const textoDiagnostico =
-    doc.splitTextToSize(
-      diagnostico || "Não informado",
-      165
-    );
-
-  doc.text(
-    textoDiagnostico,
-    20,
-    y
-  );
-
-
-  y +=
-    textoDiagnostico.length * 6 +
-    15;
-
-
-  /* MEDICAÇÃO */
-
-  doc.setFont(undefined, "bold");
-
-  doc.text(
-    "Medicação:",
-    20,
-    y
-  );
-
-  doc.setFont(undefined, "normal");
-
-  y += 8;
-
-  const textoMedicacao =
-    doc.splitTextToSize(
-      medicacao || "Não informada",
-      165
-    );
-
-  doc.text(
-    textoMedicacao,
-    20,
-    y
-  );
-
-
-  y +=
-    textoMedicacao.length * 6 +
-    15;
-
-
-  /* OBSERVAÇÕES */
-
-  doc.setFont(undefined, "bold");
-
-  doc.text(
-    "Observações:",
-    20,
-    y
-  );
-
-  doc.setFont(undefined, "normal");
-
-  y += 8;
-
-  const textoObs =
-    doc.splitTextToSize(
-      obs || "Nenhuma observação",
-      165
-    );
-
-  doc.text(
-    textoObs,
-    20,
-    y
-  );
-
-
-  /* RODAPÉ */
-
-  doc.setFontSize(9);
-
-  doc.setTextColor(
-    100,
-    100,
-    100
-  );
-
-  doc.text(
-    "Documento gerado pelo Painel Veterinário",
-    20,
-    285
-  );
-
-
-  /* NOME DO ARQUIVO */
-
-  let nomeArquivo =
-    paciente
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-zA-Z0-9 ]/g, "")
-      .trim()
-      .replace(/\s+/g, "_");
-
-
-  doc.save(
-    "Consulta_" +
-    nomeArquivo +
-    "_" +
-    data.replace(/\//g, "-") +
-    ".pdf"
-  );
-
-}
-
-
-/* =========================
-   INICIAR
-========================= */
+/* INICIALIZAÇÃO */
 
 carregar();
 
 carregarMedicacoes();
 
-setInterval(
-  carregar,
-  10000
-);
+setInterval(carregar, 10000);
 
 </script>
 
