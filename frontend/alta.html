@@ -1,186 +1,321 @@
 ```html
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Alta Veterinária</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        :root {
-            --primary-color: #4f7cac;
-            --background: #eef5fb;
-            --text: #26384a;
-        }
+  <title>Painel de Alta Veterinária</title>
 
-        * {
-            box-sizing: border-box;
-        }
+  <style>
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: var(--background);
-            color: var(--text);
-        }
+    :root {
+      --primary-color: #4f7cac;
+      --background: #eef5fb;
+      --text: #26384a;
+    }
 
-        header {
-            background: var(--primary-color);
-            color: white;
-            padding: 25px;
-            text-align: center;
-        }
+    * {
+      box-sizing: border-box;
+    }
 
-        header h1 {
-            margin: 0;
-        }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--background);
+      color: var(--text);
+    }
 
-        header p {
-            margin: 8px 0 0;
-        }
+    header {
+      background: var(--primary-color);
+      color: white;
+      padding: 25px;
+      text-align: center;
+    }
 
-        .container {
-            max-width: 850px;
-            margin: 30px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
+    header h1 {
+      margin: 0;
+    }
 
-        .titulo {
-            text-align: center;
-            margin-bottom: 25px;
-            color: var(--primary-color);
-        }
+    header p {
+      margin: 8px 0 0;
+    }
 
-        .campo {
-            border-bottom: 1px solid #ddd;
-            padding: 12px 0;
-        }
+    .container {
+      max-width: 850px;
+      margin: 30px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
 
-        .campo strong {
-            display: inline-block;
-            min-width: 180px;
-        }
+    .titulo {
+      text-align: center;
+      margin-bottom: 25px;
+      color: var(--primary-color);
+    }
 
-        .botoes {
-            text-align: center;
-            margin-top: 30px;
-        }
+    .campo {
+      border-bottom: 1px solid #ddd;
+      padding: 12px 0;
+    }
 
-        button {
-            padding: 12px 22px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 15px;
-            background: var(--primary-color);
-            color: white;
-        }
+    .campo strong {
+      display: inline-block;
+      min-width: 180px;
+    }
 
-        @media print {
-            body {
-                background: white;
-            }
+    .motivo {
+      margin-top: 25px;
+    }
 
-            header {
-                background: white;
-                color: black;
-                border-bottom: 2px solid #333;
-            }
+    .motivo strong {
+      display: block;
+      margin-bottom: 8px;
+    }
 
-            .botoes {
-                display: none;
-            }
+    .motivo-texto {
+      min-height: 70px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 12px;
+      white-space: pre-wrap;
+    }
 
-            .container {
-                box-shadow: none;
-                margin: 0;
-                max-width: 100%;
-            }
-        }
-    </style>
+    .assinatura {
+      margin-top: 70px;
+      text-align: center;
+    }
+
+    .linha-assinatura {
+      width: 300px;
+      border-top: 1px solid #222;
+      margin: 0 auto 8px;
+    }
+
+    .assinatura p {
+      margin: 4px 0;
+    }
+
+    .botoes {
+      text-align: center;
+      margin-top: 35px;
+    }
+
+    button {
+      padding: 12px 22px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 15px;
+      background: var(--primary-color);
+      color: white;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    @media print {
+
+      body {
+        background: white;
+      }
+
+      header {
+        background: white;
+        color: black;
+        border-bottom: 2px solid #333;
+      }
+
+      .botoes {
+        display: none;
+      }
+
+      .container {
+        box-shadow: none;
+        margin: 0;
+        max-width: 100%;
+      }
+
+    }
+
+  </style>
 </head>
 
 <body>
 
 <header>
-    <h1>Painel de Alta Veterinária</h1>
-    <p>Relatório de alta do paciente</p>
+
+  <h1>Painel de Alta Veterinária</h1>
+
+  <p>Relatório de alta do paciente</p>
+
 </header>
+
 
 <div class="container">
 
-    <h2 class="titulo">Relatório de Alta</h2>
+  <h2 class="titulo">
+    Relatório de Alta
+  </h2>
 
-    <div class="campo">
-        <strong>Paciente:</strong>
-        <span id="paciente">Não informado</span>
+
+  <div class="campo">
+
+    <strong>Paciente:</strong>
+
+    <span id="paciente">
+      Não informado
+    </span>
+
+  </div>
+
+
+  <div class="campo">
+
+    <strong>Data da alta:</strong>
+
+    <span id="dataAlta">
+      Não informado
+    </span>
+
+  </div>
+
+
+  <div class="campo">
+
+    <strong>Diagnóstico:</strong>
+
+    <span id="diagnostico">
+      Não informado
+    </span>
+
+  </div>
+
+
+  <div class="campo">
+
+    <strong>Medicação / Conduta:</strong>
+
+    <span id="medicacao">
+      Não informado
+    </span>
+
+  </div>
+
+
+  <div class="campo">
+
+    <strong>Orientações:</strong>
+
+    <span id="orientacoes">
+      Não informado
+    </span>
+
+  </div>
+
+
+  <div class="campo">
+
+    <strong>Retorno:</strong>
+
+    <span id="retorno">
+      Não informado
+    </span>
+
+  </div>
+
+
+  <div class="motivo">
+
+    <strong>Motivo da alta:</strong>
+
+    <div
+      class="motivo-texto"
+      id="motivo">
+      Não informado
     </div>
 
-    <div class="campo">
-        <strong>Data da alta:</strong>
-        <span id="dataAlta">Não informado</span>
-    </div>
+  </div>
 
-    <div class="campo">
-        <strong>Diagnóstico:</strong>
-        <span id="diagnostico">Não informado</span>
-    </div>
 
-    <div class="campo">
-        <strong>Medicação / Conduta:</strong>
-        <span id="medicacao">Não informado</span>
-    </div>
+  <div class="assinatura">
 
-    <div class="campo">
-        <strong>Orientações:</strong>
-        <span id="orientacoes">Não informado</span>
-    </div>
+    <div class="linha-assinatura"></div>
 
-    <div class="campo">
-        <strong>Retorno:</strong>
-        <span id="retorno">Não informado</span>
-    </div>
+    <p>
+      <strong id="veterinario">
+        Veterinário responsável
+      </strong>
+    </p>
 
-    <div class="campo">
-        <strong>Veterinário responsável:</strong>
-        <span id="veterinario">Não informado</span>
-    </div>
+    <p>
+      Assinatura do médico/veterinário
+    </p>
 
-    <div class="botoes">
-        <button onclick="window.print()">
-            ⬇️ Baixar PDF
-        </button>
-    </div>
+  </div>
+
+
+  <div class="botoes">
+
+    <button onclick="window.print()">
+      ⬇️ Baixar PDF
+    </button>
+
+  </div>
 
 </div>
 
+
 <script>
-    const parametros = new URLSearchParams(window.location.search);
 
-    document.getElementById("paciente").textContent =
-        parametros.get("paciente") || "Não informado";
+  const parametros =
+    new URLSearchParams(window.location.search);
 
-    document.getElementById("dataAlta").textContent =
-        parametros.get("dataAlta") || "Não informado";
 
-    document.getElementById("diagnostico").textContent =
-        parametros.get("diagnostico") || "Não informado";
+  document.getElementById("paciente").textContent =
+    parametros.get("paciente") ||
+    "Não informado";
 
-    document.getElementById("medicacao").textContent =
-        parametros.get("medicacao") || "Não informado";
 
-    document.getElementById("orientacoes").textContent =
-        parametros.get("orientacoes") || "Não informado";
+  document.getElementById("dataAlta").textContent =
+    parametros.get("dataAlta") ||
+    "Não informado";
 
-    document.getElementById("retorno").textContent =
-        parametros.get("retorno") || "Não informado";
 
-    document.getElementById("veterinario").textContent =
-        parametros.get("veterinario") || "Não informado";
+  document.getElementById("diagnostico").textContent =
+    parametros.get("diagnostico") ||
+    "Não informado";
+
+
+  document.getElementById("medicacao").textContent =
+    parametros.get("medicacao") ||
+    "Não informado";
+
+
+  document.getElementById("orientacoes").textContent =
+    parametros.get("orientacoes") ||
+    "Não informado";
+
+
+  document.getElementById("retorno").textContent =
+    parametros.get("retorno") ||
+    "Não informado";
+
+
+  document.getElementById("motivo").textContent =
+    parametros.get("motivo") ||
+    "Não informado";
+
+
+  document.getElementById("veterinario").textContent =
+    parametros.get("veterinario") ||
+    "Veterinário responsável";
+
 </script>
 
 </body>
