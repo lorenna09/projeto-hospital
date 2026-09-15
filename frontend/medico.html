@@ -101,8 +101,17 @@
       box-sizing: border-box;
     }
 
-    button {
-      border-radius: 9px;
+    input,
+    select {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 100px;
+      resize: vertical;
+      margin-top: 10px;
     }
 
     .botoes-consulta {
@@ -159,16 +168,11 @@
         width: 100%;
       }
 
-      input,
-      select,
-      textarea {
-        border: 1px solid #999;
-      }
-
     }
 
   </style>
 </head>
+
 
 <body>
 
@@ -195,6 +199,7 @@
 
   </div>
 
+
   <div class="consultorio-input">
 
     <label>Meu Consultório:</label>
@@ -211,11 +216,15 @@
 
   </div>
 
+
   <div id="triagens"></div>
+
 
   <hr>
 
+
   <h3>🩺 Consulta Veterinária</h3>
+
 
   <input
     id="paciente"
@@ -223,23 +232,26 @@
     readonly
   >
 
+
   <input
     id="diagnostico"
     placeholder="Diagnóstico"
   >
 
+
   <select id="medicacao">
+
     <option value="">
       Selecione a medicação
     </option>
+
   </select>
+
 
   <textarea
     id="obs"
-    placeholder="Observações">
-  </textarea>
+    placeholder="Observações"></textarea>
 
-  <!-- BOTÕES PDF E ALTA -->
 
   <div class="botoes-consulta">
 
@@ -251,6 +263,7 @@
 
     </button>
 
+
     <button
       class="btn-alta"
       onclick="darAlta()">
@@ -261,7 +274,9 @@
 
   </div>
 
+
   <br>
+
 
   <button onclick="salvar()">
     🐾 Salvar Consulta
@@ -275,9 +290,9 @@
 let triagensCarregadas = [];
 
 
-/* =========================
+/* ============================
    CARREGAR TRIAGENS
-========================= */
+============================ */
 
 function carregar() {
 
@@ -294,13 +309,16 @@ function carregar() {
 
       div.innerHTML = "";
 
+
       if (data.length === 0) {
 
         div.innerHTML =
           "<p style='color:#888; text-align:center;'>🐾 Nenhum paciente na fila.</p>";
 
         return;
+
       }
+
 
       data.forEach((t, index) => {
 
@@ -322,9 +340,7 @@ function carregar() {
 
             <p>
               <b>🚦 Risco:</b>
-              <span class="${t.risco}">
-                ${t.risco || "Não informado"}
-              </span>
+              ${t.risco || "Não informado"}
             </p>
 
             <p>
@@ -337,6 +353,7 @@ function carregar() {
               ${t.observacao || "Nenhuma"}
             </p>
 
+
             <div style="
               display:flex;
               gap:8px;
@@ -346,6 +363,7 @@ function carregar() {
               <button onclick="selecionar(${index})">
                 🐾 Atender
               </button>
+
 
               <button
                 class="btn-tv"
@@ -377,14 +395,15 @@ function carregar() {
 }
 
 
-/* =========================
+/* ============================
    CHAMAR NA TV
-========================= */
+============================ */
 
 function chamarNaTV(nome) {
 
   const consultorio =
     document.getElementById("consultorio-num").value || "01";
+
 
   fetch("/tv/chamar", {
 
@@ -431,20 +450,23 @@ function chamarNaTV(nome) {
 }
 
 
-/* =========================
+/* ============================
    SELECIONAR PACIENTE
-========================= */
+============================ */
 
 function selecionar(index) {
 
   const t =
     triagensCarregadas[index];
 
+
   document.getElementById("paciente").value =
     t.nome;
 
+
   document.getElementById("obs").value =
     t.observacao || "";
+
 
   if (t.alergia && t.alergia !== "Nenhuma") {
 
@@ -458,9 +480,9 @@ function selecionar(index) {
 }
 
 
-/* =========================
+/* ============================
    CARREGAR MEDICAÇÕES
-========================= */
+============================ */
 
 function carregarMedicacoes() {
 
@@ -473,17 +495,21 @@ function carregarMedicacoes() {
       const select =
         document.getElementById("medicacao");
 
+
       select.innerHTML =
         `<option value="">Selecione a medicação</option>`;
+
 
       data.forEach(med => {
 
         const option =
           document.createElement("option");
 
+
         option.value = med;
 
         option.textContent = med;
+
 
         select.appendChild(option);
 
@@ -500,23 +526,27 @@ function carregarMedicacoes() {
 }
 
 
-/* =========================
+/* ============================
    SALVAR CONSULTA
-========================= */
+============================ */
 
 function salvar() {
 
   const paciente =
     document.getElementById("paciente").value;
 
+
   const diagnostico =
     document.getElementById("diagnostico").value;
+
 
   const medicacao =
     document.getElementById("medicacao").value;
 
+
   const obs =
     document.getElementById("obs").value;
+
 
   if (!paciente) {
 
@@ -525,7 +555,9 @@ function salvar() {
     );
 
     return;
+
   }
+
 
   if (!medicacao) {
 
@@ -534,7 +566,9 @@ function salvar() {
     );
 
     return;
+
   }
+
 
   fetch("/consulta", {
 
@@ -558,7 +592,11 @@ function salvar() {
   .then(r => {
 
     if (!r.ok) {
-      throw new Error("Erro ao salvar consulta.");
+
+      throw new Error(
+        "Erro ao salvar consulta."
+      );
+
     }
 
     return r.json();
@@ -567,13 +605,9 @@ function salvar() {
 
   .then(() => {
 
-    alert("🐾 Consulta salva com sucesso!");
-
-    document.getElementById("diagnostico").value = "";
-
-    document.getElementById("medicacao").value = "";
-
-    document.getElementById("obs").value = "";
+    alert(
+      "🐾 Consulta salva com sucesso!"
+    );
 
   })
 
@@ -581,28 +615,33 @@ function salvar() {
 
     console.error(error);
 
-    alert("❌ Erro ao salvar consulta.");
+    alert(
+      "❌ Erro ao salvar consulta."
+    );
 
   });
 
 }
 
 
-/* =========================
+/* ============================
    BAIXAR PDF
    ABRE ALTA.HTML
-========================= */
+============================ */
 
 function baixarPDF() {
 
   const paciente =
     document.getElementById("paciente").value.trim();
 
+
   const diagnostico =
     document.getElementById("diagnostico").value.trim();
 
+
   const medicacao =
     document.getElementById("medicacao").value.trim();
+
 
   const obs =
     document.getElementById("obs").value.trim();
@@ -615,45 +654,89 @@ function baixarPDF() {
     );
 
     return;
+
   }
 
 
-  const triagem =
-    triagensCarregadas.find(
-      t => t.nome === paciente
+  /*
+    Pega o nome do veterinário que está
+    armazenado na sessão.
+  */
+
+  const assinatura =
+    sessionStorage.getItem("medflow_usuario") ||
+    sessionStorage.getItem("medflow_nome") ||
+    "";
+
+
+  if (!assinatura) {
+
+    alert(
+      "⚠️ Informe o nome do médico/veterinário antes de gerar o relatório."
     );
 
+    return;
 
-  const dataAlta =
-    new Date().toLocaleDateString("pt-BR");
+  }
 
 
-  const parametros = new URLSearchParams({
+  /*
+    O motivo pode ser informado na hora.
+  */
 
-    paciente: paciente,
+  const motivo =
+    prompt("🏠 Informe o motivo da alta:");
 
-    dataAlta: dataAlta,
 
-    diagnostico: diagnostico || "Não informado",
+  if (motivo === null) {
+    return;
+  }
 
-    medicacao: medicacao || "Não informado",
 
-    orientacoes: obs || "Não informado",
+  if (!motivo.trim()) {
 
-    retorno: "Não informado",
+    alert(
+      "⚠️ Informe o motivo da alta."
+    );
 
-    veterinario:
-      sessionStorage.getItem("medflow_usuario") ||
-      sessionStorage.getItem("medflow_nome") ||
-      "Não informado"
+    return;
 
-  });
+  }
+
+
+  const parametros =
+    new URLSearchParams({
+
+      paciente: paciente,
+
+      dataAlta:
+        new Date().toLocaleDateString("pt-BR"),
+
+      diagnostico:
+        diagnostico || "Não informado",
+
+      medicacao:
+        medicacao || "Não informado",
+
+      orientacoes:
+        obs || "Não informado",
+
+      retorno:
+        "Não informado",
+
+      motivo:
+        motivo.trim(),
+
+      assinatura:
+        assinatura
+
+    });
 
 
   /*
     Abre o alta.html.
-    O alta.html terá o botão que chama
-    window.print().
+    É no alta.html que o botão
+    window.print() abre a impressão.
   */
 
   window.open(
@@ -664,20 +747,23 @@ function baixarPDF() {
 }
 
 
-/* =========================
+/* ============================
    DAR ALTA
-========================= */
+============================ */
 
 function darAlta() {
 
   const paciente =
     document.getElementById("paciente").value;
 
+
   const diagnostico =
     document.getElementById("diagnostico").value;
 
+
   const medicacao =
     document.getElementById("medicacao").value;
+
 
   const obs =
     document.getElementById("obs").value;
@@ -690,6 +776,7 @@ function darAlta() {
     );
 
     return;
+
   }
 
 
@@ -700,6 +787,7 @@ function darAlta() {
     );
 
     return;
+
   }
 
 
@@ -710,14 +798,62 @@ function darAlta() {
     );
 
     return;
+
   }
 
 
-  const confirmar = confirm(
-    "🏠 Deseja realmente dar alta para " +
-    paciente +
-    "?"
-  );
+  /*
+    Pede o motivo da alta.
+  */
+
+  const motivo =
+    prompt("🏠 Informe o motivo da alta:");
+
+
+  if (motivo === null) {
+    return;
+  }
+
+
+  if (!motivo.trim()) {
+
+    alert(
+      "⚠️ Informe o motivo da alta."
+    );
+
+    return;
+
+  }
+
+
+  /*
+    Pega o nome do veterinário
+    para usar como assinatura.
+  */
+
+  const assinatura =
+    sessionStorage.getItem("medflow_usuario") ||
+    sessionStorage.getItem("medflow_nome") ||
+    "";
+
+
+  if (!assinatura) {
+
+    alert(
+      "⚠️ Informe o nome do médico/veterinário antes de dar alta."
+    );
+
+    return;
+
+  }
+
+
+  const confirmar =
+    confirm(
+      "🏠 Deseja realmente dar alta para " +
+      paciente +
+      "?"
+    );
 
 
   if (!confirmar) {
@@ -749,13 +885,17 @@ function darAlta() {
       orientacoes:
         obs,
 
+      motivo:
+        motivo.trim(),
+
       retorno:
         "",
 
       medicoResponsavel:
-        sessionStorage.getItem("medflow_usuario") ||
-        sessionStorage.getItem("medflow_nome") ||
-        ""
+        assinatura,
+
+      assinatura:
+        assinatura
 
     })
 
@@ -764,7 +904,11 @@ function darAlta() {
   .then(r => {
 
     if (!r.ok) {
-      throw new Error("Erro ao dar alta");
+
+      throw new Error(
+        "Erro ao dar alta"
+      );
+
     }
 
     return r.json();
@@ -779,6 +923,7 @@ function darAlta() {
       "!"
     );
 
+
     document.getElementById("paciente").value = "";
 
     document.getElementById("diagnostico").value = "";
@@ -786,6 +931,7 @@ function darAlta() {
     document.getElementById("medicacao").value = "";
 
     document.getElementById("obs").value = "";
+
 
     carregar();
 
@@ -804,9 +950,9 @@ function darAlta() {
 }
 
 
-/* =========================
+/* ============================
    INICIALIZAÇÃO
-========================= */
+============================ */
 
 carregar();
 
