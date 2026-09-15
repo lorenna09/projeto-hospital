@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -22,10 +23,7 @@
       padding: 25px;
     }
 
-    h2 {
-      color: #2C5D8A;
-    }
-
+    h2,
     h3 {
       color: #2C5D8A;
     }
@@ -107,8 +105,6 @@
       border-radius: 9px;
     }
 
-    /* BOTÕES DA CONSULTA */
-
     .botoes-consulta {
       display: flex;
       gap: 10px;
@@ -143,8 +139,6 @@
     .btn-alta:hover {
       background: #1e7e34;
     }
-
-    /* ESCONDE BOTÕES AO GERAR PDF */
 
     @media print {
 
@@ -245,18 +239,16 @@
     placeholder="Observações">
   </textarea>
 
-
   <!-- BOTÕES PDF E ALTA -->
 
   <div class="botoes-consulta">
 
     <button
-        onclick="window.print()" style="margin-top: 1rem; padding:
-            10px 20px; font-weight: bold; cursor: pointer; border-radius: 8px;
-            border: none; background: #2C5D8A; color: var(--primary-color);">
-            Baixar PDF
+      class="btn-pdf"
+      onclick="baixarPDF()">
 
-      
+      📄 Baixar PDF
+
     </button>
 
     <button
@@ -269,7 +261,6 @@
 
   </div>
 
-
   <br>
 
   <button onclick="salvar()">
@@ -278,9 +269,15 @@
 
 </div>
 
+
 <script>
 
 let triagensCarregadas = [];
+
+
+/* =========================
+   CARREGAR TRIAGENS
+========================= */
 
 function carregar() {
 
@@ -326,7 +323,7 @@ function carregar() {
             <p>
               <b>🚦 Risco:</b>
               <span class="${t.risco}">
-                ${t.risco}
+                ${t.risco || "Não informado"}
               </span>
             </p>
 
@@ -366,10 +363,23 @@ function carregar() {
 
       });
 
+    })
+
+    .catch(error => {
+
+      console.error(error);
+
+      document.getElementById("triagens").innerHTML =
+        "<p style='color:red;'>❌ Erro ao carregar pacientes.</p>";
+
     });
 
 }
 
+
+/* =========================
+   CHAMAR NA TV
+========================= */
 
 function chamarNaTV(nome) {
 
@@ -408,10 +418,22 @@ function chamarNaTV(nome) {
       "!"
     );
 
+  })
+
+  .catch(error => {
+
+    console.error(error);
+
+    alert("❌ Erro ao chamar o paciente na TV.");
+
   });
 
 }
 
+
+/* =========================
+   SELECIONAR PACIENTE
+========================= */
 
 function selecionar(index) {
 
@@ -435,6 +457,10 @@ function selecionar(index) {
 
 }
 
+
+/* =========================
+   CARREGAR MEDICAÇÕES
+========================= */
 
 function carregarMedicacoes() {
 
@@ -463,12 +489,20 @@ function carregarMedicacoes() {
 
       });
 
+    })
+
+    .catch(error => {
+
+      console.error(error);
+
     });
 
 }
 
 
-/* SALVAR CONSULTA */
+/* =========================
+   SALVAR CONSULTA
+========================= */
 
 function salvar() {
 
@@ -521,7 +555,15 @@ function salvar() {
 
   })
 
-  .then(r => r.json())
+  .then(r => {
+
+    if (!r.ok) {
+      throw new Error("Erro ao salvar consulta.");
+    }
+
+    return r.json();
+
+  })
 
   .then(() => {
 
@@ -533,17 +575,38 @@ function salvar() {
 
     document.getElementById("obs").value = "";
 
+  })
+
+  .catch(error => {
+
+    console.error(error);
+
+    alert("❌ Erro ao salvar consulta.");
+
   });
 
 }
 
 
-/* BAIXAR PDF */
+/* =========================
+   BAIXAR PDF
+   ABRE ALTA.HTML
+========================= */
 
 function baixarPDF() {
 
   const paciente =
-    document.getElementById("paciente").value;
+    document.getElementById("paciente").value.trim();
+
+  const diagnostico =
+    document.getElementById("diagnostico").value.trim();
+
+  const medicacao =
+    document.getElementById("medicacao").value.trim();
+
+  const obs =
+    document.getElementById("obs").value.trim();
+
 
   if (!paciente) {
 
@@ -554,17 +617,71 @@ function baixarPDF() {
     return;
   }
 
-  window.print();
+
+  const triagem =
+    triagensCarregadas.find(
+      t => t.nome === paciente
+    );
+
+
+  const dataAlta =
+    new Date().toLocaleDateString("pt-BR");
+
+
+  const parametros = new URLSearchParams({
+
+    paciente: paciente,
+
+    dataAlta: dataAlta,
+
+    diagnostico: diagnostico || "Não informado",
+
+    medicacao: medicacao || "Não informado",
+
+    orientacoes: obs || "Não informado",
+
+    retorno: "Não informado",
+
+    veterinario:
+      sessionStorage.getItem("medflow_usuario") ||
+      sessionStorage.getItem("medflow_nome") ||
+      "Não informado"
+
+  });
+
+
+  /*
+    Abre o alta.html.
+    O alta.html terá o botão que chama
+    window.print().
+  */
+
+  window.open(
+    "alta.html?" + parametros.toString(),
+    "_blank"
+  );
 
 }
 
 
-/* DAR ALTA */
+/* =========================
+   DAR ALTA
+========================= */
 
 function darAlta() {
 
   const paciente =
     document.getElementById("paciente").value;
+
+  const diagnostico =
+    document.getElementById("diagnostico").value;
+
+  const medicacao =
+    document.getElementById("medicacao").value;
+
+  const obs =
+    document.getElementById("obs").value;
+
 
   if (!paciente) {
 
@@ -575,15 +692,38 @@ function darAlta() {
     return;
   }
 
+
+  if (!diagnostico) {
+
+    alert(
+      "⚠️ Informe o diagnóstico antes de dar alta."
+    );
+
+    return;
+  }
+
+
+  if (!medicacao) {
+
+    alert(
+      "⚠️ Selecione uma medicação antes de dar alta."
+    );
+
+    return;
+  }
+
+
   const confirmar = confirm(
     "🏠 Deseja realmente dar alta para " +
     paciente +
     "?"
   );
 
+
   if (!confirmar) {
     return;
   }
+
 
   fetch("/alta", {
 
@@ -595,7 +735,27 @@ function darAlta() {
 
     body: JSON.stringify({
 
-      paciente: paciente
+      paciente: paciente,
+
+      dataAlta:
+        new Date().toISOString(),
+
+      diagnostico:
+        diagnostico,
+
+      medicacao:
+        medicacao,
+
+      orientacoes:
+        obs,
+
+      retorno:
+        "",
+
+      medicoResponsavel:
+        sessionStorage.getItem("medflow_usuario") ||
+        sessionStorage.getItem("medflow_nome") ||
+        ""
 
     })
 
@@ -644,7 +804,9 @@ function darAlta() {
 }
 
 
-/* INICIALIZAÇÃO */
+/* =========================
+   INICIALIZAÇÃO
+========================= */
 
 carregar();
 
@@ -656,3 +818,4 @@ setInterval(carregar, 10000);
 
 </body>
 </html>
+```
