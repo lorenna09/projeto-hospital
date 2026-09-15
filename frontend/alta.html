@@ -1,19 +1,188 @@
+```html
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Painel de Alta Veterinária</title>
+
+    <style>
+        :root {
+            --primary-color: #4f7cac;
+            --background: #eef5fb;
+            --text: #26384a;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        header {
+            background: var(--primary-color);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        header p {
+            margin: 8px 0 0;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .titulo {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+        }
+
+        .campo {
+            border-bottom: 1px solid #ddd;
+            padding: 12px 0;
+        }
+
+        .campo strong {
+            display: inline-block;
+            min-width: 180px;
+        }
+
+        .botoes {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 22px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+            background: var(--primary-color);
+            color: white;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            header {
+                background: white;
+                color: black;
+                border-bottom: 2px solid #333;
+            }
+
+            .botoes {
+                display: none;
+            }
+
+            .container {
+                box-shadow: none;
+                margin: 0;
+                max-width: 100%;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <header>
-        <h1>Painel de Alta
-            <P>Demonstração de CRUD Frontend/Backend (Node.js)</P>
-            <button onclick="window.print()" style="margin-top: 1rem; padding:
-            10px 20px; font-weight: bold; cursor: pointer; border-radius: 8px;
-            border: none; background: white; color: var(--primary-color);">⬇️
-            Baixar PDF</button>
-        </h1>
-    </header>
+
+<header>
+    <h1>Painel de Alta Veterinária</h1>
+    <p>Relatório de alta do paciente</p>
+</header>
+
+<div class="container">
+
+    <h2 class="titulo">Relatório de Alta</h2>
+
+    <div class="campo">
+        <strong>Paciente:</strong>
+        <span id="paciente">Não informado</span>
+    </div>
+
+    <div class="campo">
+        <strong>Data da alta:</strong>
+        <span id="dataAlta">Não informado</span>
+    </div>
+
+    <div class="campo">
+        <strong>Diagnóstico:</strong>
+        <span id="diagnostico">Não informado</span>
+    </div>
+
+    <div class="campo">
+        <strong>Medicação / Conduta:</strong>
+        <span id="medicacao">Não informado</span>
+    </div>
+
+    <div class="campo">
+        <strong>Orientações:</strong>
+        <span id="orientacoes">Não informado</span>
+    </div>
+
+    <div class="campo">
+        <strong>Retorno:</strong>
+        <span id="retorno">Não informado</span>
+    </div>
+
+    <div class="campo">
+        <strong>Veterinário responsável:</strong>
+        <span id="veterinario">Não informado</span>
+    </div>
+
+    <div class="botoes">
+        <button onclick="window.print()">
+            ⬇️ Baixar PDF
+        </button>
+    </div>
+
+</div>
+
+<script>
+    const parametros = new URLSearchParams(window.location.search);
+
+    document.getElementById("paciente").textContent =
+        parametros.get("paciente") || "Não informado";
+
+    document.getElementById("dataAlta").textContent =
+        parametros.get("dataAlta") || "Não informado";
+
+    document.getElementById("diagnostico").textContent =
+        parametros.get("diagnostico") || "Não informado";
+
+    document.getElementById("medicacao").textContent =
+        parametros.get("medicacao") || "Não informado";
+
+    document.getElementById("orientacoes").textContent =
+        parametros.get("orientacoes") || "Não informado";
+
+    document.getElementById("retorno").textContent =
+        parametros.get("retorno") || "Não informado";
+
+    document.getElementById("veterinario").textContent =
+        parametros.get("veterinario") || "Não informado";
+</script>
+
 </body>
 </html>
+```
