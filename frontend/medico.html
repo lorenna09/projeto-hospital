@@ -99,19 +99,34 @@
       border-radius: 9px;
       padding: 11px;
       box-sizing: border-box;
+      font-family: Arial, sans-serif;
     }
 
     input,
-    select {
+    select,
+    textarea {
       width: 100%;
       margin-top: 10px;
     }
 
     textarea {
-      width: 100%;
       min-height: 100px;
       resize: vertical;
-      margin-top: 10px;
+    }
+
+    .campo-alta {
+      margin-top: 18px;
+      padding: 18px;
+      background: #F7FBFF;
+      border: 1px solid #D5E8F7;
+      border-radius: 12px;
+    }
+
+    .campo-alta label {
+      display: block;
+      font-weight: bold;
+      color: #2C5D8A;
+      margin-bottom: 5px;
     }
 
     .botoes-consulta {
@@ -131,10 +146,6 @@
       border-radius: 8px;
     }
 
-    .btn-pdf:hover {
-      background: #21496d;
-    }
-
     .btn-alta {
       background: #28a745;
       color: white;
@@ -145,8 +156,8 @@
       border-radius: 8px;
     }
 
-    .btn-alta:hover {
-      background: #1e7e34;
+    button {
+      border-radius: 9px;
     }
 
     @media print {
@@ -178,6 +189,8 @@
 
 <div class="container">
 
+  <!-- CABEÇALHO -->
+
   <div style="
     display:flex;
     justify-content:space-between;
@@ -200,6 +213,8 @@
   </div>
 
 
+  <!-- CONSULTÓRIO -->
+
   <div class="consultorio-input">
 
     <label>Meu Consultório:</label>
@@ -217,11 +232,15 @@
   </div>
 
 
+  <!-- FILA DE PACIENTES -->
+
   <div id="triagens"></div>
 
 
   <hr>
 
+
+  <!-- CONSULTA -->
 
   <h3>🩺 Consulta Veterinária</h3>
 
@@ -252,6 +271,40 @@
     id="obs"
     placeholder="Observações"></textarea>
 
+
+  <!-- DADOS DA ALTA -->
+
+  <div class="campo-alta">
+
+    <h3>
+      🏠 Dados da Alta
+    </h3>
+
+
+    <label for="motivoAlta">
+      Motivo da alta:
+    </label>
+
+    <textarea
+      id="motivoAlta"
+      placeholder="Digite o motivo da alta do paciente..."
+    ></textarea>
+
+
+    <label for="assinatura">
+      Médico/Veterinário responsável:
+    </label>
+
+    <input
+      type="text"
+      id="assinatura"
+      placeholder="Digite o nome do médico/veterinário"
+    >
+
+  </div>
+
+
+  <!-- BOTÕES -->
 
   <div class="botoes-consulta">
 
@@ -316,7 +369,6 @@ function carregar() {
           "<p style='color:#888; text-align:center;'>🐾 Nenhum paciente na fila.</p>";
 
         return;
-
       }
 
 
@@ -353,7 +405,6 @@ function carregar() {
               ${t.observacao || "Nenhuma"}
             </p>
 
-
             <div style="
               display:flex;
               gap:8px;
@@ -363,7 +414,6 @@ function carregar() {
               <button onclick="selecionar(${index})">
                 🐾 Atender
               </button>
-
 
               <button
                 class="btn-tv"
@@ -443,7 +493,9 @@ function chamarNaTV(nome) {
 
     console.error(error);
 
-    alert("❌ Erro ao chamar o paciente na TV.");
+    alert(
+      "❌ Erro ao chamar o paciente na TV."
+    );
 
   });
 
@@ -505,11 +557,9 @@ function carregarMedicacoes() {
         const option =
           document.createElement("option");
 
-
         option.value = med;
 
         option.textContent = med;
-
 
         select.appendChild(option);
 
@@ -535,14 +585,11 @@ function salvar() {
   const paciente =
     document.getElementById("paciente").value;
 
-
   const diagnostico =
     document.getElementById("diagnostico").value;
 
-
   const medicacao =
     document.getElementById("medicacao").value;
-
 
   const obs =
     document.getElementById("obs").value;
@@ -555,7 +602,6 @@ function salvar() {
     );
 
     return;
-
   }
 
 
@@ -566,7 +612,6 @@ function salvar() {
     );
 
     return;
-
   }
 
 
@@ -589,19 +634,7 @@ function salvar() {
 
   })
 
-  .then(r => {
-
-    if (!r.ok) {
-
-      throw new Error(
-        "Erro ao salvar consulta."
-      );
-
-    }
-
-    return r.json();
-
-  })
+  .then(r => r.json())
 
   .then(() => {
 
@@ -634,73 +667,49 @@ function baixarPDF() {
   const paciente =
     document.getElementById("paciente").value.trim();
 
-
   const diagnostico =
     document.getElementById("diagnostico").value.trim();
-
 
   const medicacao =
     document.getElementById("medicacao").value.trim();
 
-
   const obs =
     document.getElementById("obs").value.trim();
+
+  const motivo =
+    document.getElementById("motivoAlta").value.trim();
+
+  const assinatura =
+    document.getElementById("assinatura").value.trim();
 
 
   if (!paciente) {
 
     alert(
-      "⚠️ Selecione um paciente antes de baixar o PDF."
+      "⚠️ Selecione um paciente antes de gerar o PDF."
     );
 
     return;
-
   }
 
 
-  /*
-    Pega o nome do veterinário que está
-    armazenado na sessão.
-  */
+  if (!motivo) {
 
-  const assinatura =
-    sessionStorage.getItem("medflow_usuario") ||
-    sessionStorage.getItem("medflow_nome") ||
-    "";
+    alert(
+      "⚠️ Digite o motivo da alta."
+    );
+
+    return;
+  }
 
 
   if (!assinatura) {
 
     alert(
-      "⚠️ Informe o nome do médico/veterinário antes de gerar o relatório."
+      "⚠️ Digite o nome do médico/veterinário."
     );
 
     return;
-
-  }
-
-
-  /*
-    O motivo pode ser informado na hora.
-  */
-
-  const motivo =
-    prompt("🏠 Informe o motivo da alta:");
-
-
-  if (motivo === null) {
-    return;
-  }
-
-
-  if (!motivo.trim()) {
-
-    alert(
-      "⚠️ Informe o motivo da alta."
-    );
-
-    return;
-
   }
 
 
@@ -725,7 +734,7 @@ function baixarPDF() {
         "Não informado",
 
       motivo:
-        motivo.trim(),
+        motivo,
 
       assinatura:
         assinatura
@@ -733,14 +742,9 @@ function baixarPDF() {
     });
 
 
-  /*
-    Abre o alta.html.
-    É no alta.html que o botão
-    window.print() abre a impressão.
-  */
-
   window.open(
-    "alta.html?" + parametros.toString(),
+    "alta.html?" +
+    parametros.toString(),
     "_blank"
   );
 
@@ -754,20 +758,25 @@ function baixarPDF() {
 function darAlta() {
 
   const paciente =
-    document.getElementById("paciente").value;
-
+    document.getElementById("paciente").value.trim();
 
   const diagnostico =
-    document.getElementById("diagnostico").value;
-
+    document.getElementById("diagnostico").value.trim();
 
   const medicacao =
-    document.getElementById("medicacao").value;
-
+    document.getElementById("medicacao").value.trim();
 
   const obs =
-    document.getElementById("obs").value;
+    document.getElementById("obs").value.trim();
 
+  const motivo =
+    document.getElementById("motivoAlta").value.trim();
+
+  const assinatura =
+    document.getElementById("assinatura").value.trim();
+
+
+  /* VERIFICA PACIENTE */
 
   if (!paciente) {
 
@@ -776,9 +785,10 @@ function darAlta() {
     );
 
     return;
-
   }
 
+
+  /* VERIFICA DIAGNÓSTICO */
 
   if (!diagnostico) {
 
@@ -787,9 +797,10 @@ function darAlta() {
     );
 
     return;
-
   }
 
+
+  /* VERIFICA MEDICAÇÃO */
 
   if (!medicacao) {
 
@@ -798,55 +809,34 @@ function darAlta() {
     );
 
     return;
-
   }
 
 
-  /*
-    Pede o motivo da alta.
-  */
+  /* VERIFICA MOTIVO */
 
-  const motivo =
-    prompt("🏠 Informe o motivo da alta:");
-
-
-  if (motivo === null) {
-    return;
-  }
-
-
-  if (!motivo.trim()) {
+  if (!motivo) {
 
     alert(
-      "⚠️ Informe o motivo da alta."
+      "⚠️ Digite o motivo da alta."
     );
 
     return;
-
   }
 
 
-  /*
-    Pega o nome do veterinário
-    para usar como assinatura.
-  */
-
-  const assinatura =
-    sessionStorage.getItem("medflow_usuario") ||
-    sessionStorage.getItem("medflow_nome") ||
-    "";
-
+  /* VERIFICA ASSINATURA */
 
   if (!assinatura) {
 
     alert(
-      "⚠️ Informe o nome do médico/veterinário antes de dar alta."
+      "⚠️ Digite o nome do médico/veterinário."
     );
 
     return;
-
   }
 
+
+  /* CONFIRMAÇÃO */
 
   const confirmar =
     confirm(
@@ -860,6 +850,8 @@ function darAlta() {
     return;
   }
 
+
+  /* ENVIA PARA O BACKEND */
 
   fetch("/alta", {
 
@@ -886,7 +878,7 @@ function darAlta() {
         obs,
 
       motivo:
-        motivo.trim(),
+        motivo,
 
       retorno:
         "",
@@ -924,6 +916,46 @@ function darAlta() {
     );
 
 
+    /* ABRE O RELATÓRIO DE ALTA */
+
+    const parametros =
+      new URLSearchParams({
+
+        paciente: paciente,
+
+        dataAlta:
+          new Date().toLocaleDateString("pt-BR"),
+
+        diagnostico:
+          diagnostico,
+
+        medicacao:
+          medicacao,
+
+        orientacoes:
+          obs || "Não informado",
+
+        retorno:
+          "Não informado",
+
+        motivo:
+          motivo,
+
+        assinatura:
+          assinatura
+
+      });
+
+
+    window.open(
+      "alta.html?" +
+      parametros.toString(),
+      "_blank"
+    );
+
+
+    /* LIMPA OS CAMPOS */
+
     document.getElementById("paciente").value = "";
 
     document.getElementById("diagnostico").value = "";
@@ -931,6 +963,10 @@ function darAlta() {
     document.getElementById("medicacao").value = "";
 
     document.getElementById("obs").value = "";
+
+    document.getElementById("motivoAlta").value = "";
+
+    document.getElementById("assinatura").value = "";
 
 
     carregar();
