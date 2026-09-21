@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -54,6 +53,23 @@
     }
 
     .btn-abrir-tv:hover {
+      background: #468CC7;
+    }
+
+    /* BOTÃO INTERAÇÃO */
+
+    .btn-interacao {
+      background: #5B9BD5;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-left: 8px;
+    }
+
+    .btn-interacao:hover {
       background: #468CC7;
     }
 
@@ -167,6 +183,7 @@
       }
 
       .btn-abrir-tv,
+      .btn-interacao,
       .btn-tv,
       .botoes-consulta,
       button {
@@ -202,13 +219,30 @@
       🐾💙 Painel Veterinário 🐶🐱
     </h2>
 
-    <button
-      class="btn-abrir-tv"
-      onclick="window.open('tv.html','_blank')">
+    <div>
 
-      📺 Abrir Tela da TV
+      <!-- BOTÃO DA TV -->
 
-    </button>
+      <button
+        class="btn-abrir-tv"
+        onclick="window.open('tv.html','_blank')">
+
+        📺 Abrir Tela da TV
+
+      </button>
+
+
+      <!-- BOTÃO INTERAÇÃO -->
+
+      <button
+        class="btn-interacao"
+        onclick="abrirInteracao()">
+
+        🔗 Interação
+
+      </button>
+
+    </div>
 
   </div>
 
@@ -341,6 +375,42 @@
 <script>
 
 let triagensCarregadas = [];
+
+
+/* ============================
+   ABRIR INTERAÇÃO
+============================ */
+
+function abrirInteracao() {
+
+  const paciente =
+    document.getElementById("paciente").value.trim();
+
+
+  if (!paciente) {
+
+    alert(
+      "⚠️ Primeiro clique em 'Atender' e selecione um paciente."
+    );
+
+    return;
+  }
+
+
+  const parametros =
+    new URLSearchParams({
+
+      paciente: paciente
+
+    });
+
+
+  window.open(
+    "interacao.html?" + parametros.toString(),
+    "_blank"
+  );
+
+}
 
 
 /* ============================
@@ -659,7 +729,6 @@ function salvar() {
 
 /* ============================
    BAIXAR PDF
-   ABRE ALTA.HTML
 ============================ */
 
 function baixarPDF() {
@@ -776,8 +845,6 @@ function darAlta() {
     document.getElementById("assinatura").value.trim();
 
 
-  /* VERIFICA PACIENTE */
-
   if (!paciente) {
 
     alert(
@@ -787,8 +854,6 @@ function darAlta() {
     return;
   }
 
-
-  /* VERIFICA DIAGNÓSTICO */
 
   if (!diagnostico) {
 
@@ -800,8 +865,6 @@ function darAlta() {
   }
 
 
-  /* VERIFICA MEDICAÇÃO */
-
   if (!medicacao) {
 
     alert(
@@ -811,8 +874,6 @@ function darAlta() {
     return;
   }
 
-
-  /* VERIFICA MOTIVO */
 
   if (!motivo) {
 
@@ -824,8 +885,6 @@ function darAlta() {
   }
 
 
-  /* VERIFICA ASSINATURA */
-
   if (!assinatura) {
 
     alert(
@@ -835,8 +894,6 @@ function darAlta() {
     return;
   }
 
-
-  /* CONFIRMAÇÃO */
 
   const confirmar =
     confirm(
@@ -850,8 +907,6 @@ function darAlta() {
     return;
   }
 
-
-  /* ENVIA PARA O BACKEND */
 
   fetch("/alta", {
 
@@ -916,8 +971,6 @@ function darAlta() {
     );
 
 
-    /* ABRE O RELATÓRIO DE ALTA */
-
     const parametros =
       new URLSearchParams({
 
@@ -953,8 +1006,6 @@ function darAlta() {
       "_blank"
     );
 
-
-    /* LIMPA OS CAMPOS */
 
     document.getElementById("paciente").value = "";
 
@@ -1000,4 +1051,3 @@ setInterval(carregar, 10000);
 
 </body>
 </html>
-```
