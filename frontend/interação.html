@@ -1,1 +1,685 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Interação - Quartos Veterinários</title>
+
+  <style>
+
+    body {
+      background: #DCEEFF;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      padding: 25px;
+      box-sizing: border-box;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      color: #2C5D8A;
+      margin-top: 0;
+    }
+
+    .subtitulo {
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .paciente {
+      background: #EEF7FF;
+      border: 1px solid #C9E2F5;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+    }
+
+    .paciente strong {
+      color: #2C5D8A;
+    }
+
+    #nomePaciente {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .resumo {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+    }
+
+    .resumo-card {
+      flex: 1;
+      min-width: 180px;
+      padding: 15px;
+      border-radius: 12px;
+      background: #F7FBFF;
+      border: 1px solid #D5E8F7;
+    }
+
+    .resumo-card strong {
+      display: block;
+      font-size: 22px;
+      color: #2C5D8A;
+      margin-bottom: 5px;
+    }
+
+    .quartos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
+    }
+
+    .quarto {
+      padding: 20px;
+      border-radius: 15px;
+      background: white;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    }
+
+    .quarto-vazio {
+      border: 2px solid #28a745;
+    }
+
+    .quarto-ocupado {
+      border: 2px solid #dc3545;
+    }
+
+    .quarto h2 {
+      margin-top: 0;
+      color: #2C5D8A;
+    }
+
+    .status {
+      font-weight: bold;
+      margin: 12px 0;
+    }
+
+    .status-vazio {
+      color: #28a745;
+    }
+
+    .status-ocupado {
+      color: #dc3545;
+    }
+
+    .animal {
+      color: #555;
+      margin-bottom: 15px;
+    }
+
+    .btn-encaminhar {
+      width: 100%;
+      background: #5B9BD5;
+      color: white;
+      border: none;
+      padding: 11px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-encaminhar:hover {
+      background: #468CC7;
+    }
+
+    .btn-liberar {
+      width: 100%;
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 11px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-liberar:hover {
+      background: #bb2d3b;
+    }
+
+    .btn-voltar {
+      background: #2C5D8A;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 9px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .btn-voltar:hover {
+      background: #21486b;
+    }
+
+    .sem-quarto {
+      background: #FFF3CD;
+      color: #856404;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+  <button
+    class="btn-voltar"
+    onclick="window.close()">
+
+    ← Voltar
+
+  </button>
+
+
+  <h1>
+    🏥 Interação - Quartos Veterinários
+  </h1>
+
+
+  <p class="subtitulo">
+    Consulte os quartos disponíveis e encaminhe o paciente para um quarto vazio.
+  </p>
+
+
+  <!-- PACIENTE -->
+
+  <div class="paciente">
+
+    <strong>
+      🐾 Paciente selecionado:
+    </strong>
+
+    <span id="nomePaciente">
+      Nenhum paciente selecionado
+    </span>
+
+  </div>
+
+
+  <!-- RESUMO -->
+
+  <div class="resumo">
+
+    <div class="resumo-card">
+
+      <strong id="totalQuartos">
+        0
+      </strong>
+
+      Total de quartos
+
+    </div>
+
+
+    <div class="resumo-card">
+
+      <strong id="quartosVazios">
+        0
+      </strong>
+
+      Quartos vazios
+
+    </div>
+
+
+    <div class="resumo-card">
+
+      <strong id="quartosOcupados">
+        0
+      </strong>
+
+      Quartos ocupados
+
+    </div>
+
+  </div>
+
+
+  <!-- AVISO -->
+
+  <div
+    class="sem-quarto"
+    id="semQuarto">
+
+    ⚠️ No momento não existe nenhum quarto vazio.
+
+  </div>
+
+
+  <!-- QUARTOS -->
+
+  <div
+    class="quartos"
+    id="quartos">
+
+  </div>
+
+</div>
+
+
+<script>
+
+
+/* ============================
+   PEGAR PACIENTE DA URL
+============================ */
+
+const parametros =
+  new URLSearchParams(
+    window.location.search
+  );
+
+
+const paciente =
+  parametros.get("paciente");
+
+
+if (paciente) {
+
+  document.getElementById(
+    "nomePaciente"
+  ).textContent = paciente;
+
+}
+
+
+/* ============================
+   QUARTOS
+============================ */
+
+let quartos =
+  JSON.parse(
+    localStorage.getItem("quartosVeterinarios")
+  );
+
+
+/* SE AINDA NÃO EXISTIR,
+   CRIA OS QUARTOS */
+
+if (!quartos) {
+
+  quartos = [
+
+    {
+      numero: "01",
+      status: "vazio",
+      paciente: ""
+    },
+
+    {
+      numero: "02",
+      status: "ocupado",
+      paciente: "Thor"
+    },
+
+    {
+      numero: "03",
+      status: "vazio",
+      paciente: ""
+    },
+
+    {
+      numero: "04",
+      status: "ocupado",
+      paciente: "Luna"
+    },
+
+    {
+      numero: "05",
+      status: "vazio",
+      paciente: ""
+    },
+
+    {
+      numero: "06",
+      status: "vazio",
+      paciente: ""
+    }
+
+  ];
+
+  salvarQuartos();
+
+}
+
+
+/* ============================
+   SALVAR QUARTOS
+============================ */
+
+function salvarQuartos() {
+
+  localStorage.setItem(
+    "quartosVeterinarios",
+    JSON.stringify(quartos)
+  );
+
+}
+
+
+/* ============================
+   MOSTRAR QUARTOS
+============================ */
+
+function carregarQuartos() {
+
+  const div =
+    document.getElementById("quartos");
+
+  div.innerHTML = "";
+
+
+  let vazios = 0;
+
+  let ocupados = 0;
+
+
+  quartos.forEach(quarto => {
+
+
+    if (quarto.status === "vazio") {
+
+      vazios++;
+
+    } else {
+
+      ocupados++;
+
+    }
+
+
+    /* QUARTO VAZIO */
+
+    if (quarto.status === "vazio") {
+
+      div.innerHTML += `
+
+        <div class="quarto quarto-vazio">
+
+          <h2>
+            🛏️ Quarto ${quarto.numero}
+          </h2>
+
+          <div class="status status-vazio">
+            🟢 VAZIO
+          </div>
+
+          <div class="animal">
+            Disponível para internação.
+          </div>
+
+          <button
+            class="btn-encaminhar"
+            onclick="encaminhar('${quarto.numero}')">
+
+            ➡️ Encaminhar paciente
+
+          </button>
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* QUARTO OCUPADO */
+
+    else {
+
+      div.innerHTML += `
+
+        <div class="quarto quarto-ocupado">
+
+          <h2>
+            🛏️ Quarto ${quarto.numero}
+          </h2>
+
+          <div class="status status-ocupado">
+            🔴 OCUPADO
+          </div>
+
+          <div class="animal">
+
+            🐾 Paciente:
+            <strong>
+              ${quarto.paciente}
+            </strong>
+
+          </div>
+
+          <button
+            class="btn-liberar"
+            onclick="liberarQuarto('${quarto.numero}')">
+
+            🏠 Liberar quarto
+
+          </button>
+
+        </div>
+
+      `;
+
+    }
+
+  });
+
+
+  /* ATUALIZA RESUMO */
+
+  document.getElementById(
+    "totalQuartos"
+  ).textContent = quartos.length;
+
+
+  document.getElementById(
+    "quartosVazios"
+  ).textContent = vazios;
+
+
+  document.getElementById(
+    "quartosOcupados"
+  ).textContent = ocupados;
+
+
+  /* AVISO SE NÃO TIVER QUARTO */
+
+  const aviso =
+    document.getElementById("semQuarto");
+
+
+  if (vazios === 0) {
+
+    aviso.style.display = "block";
+
+  } else {
+
+    aviso.style.display = "none";
+
+  }
+
+}
+
+
+/* ============================
+   ENCAMINHAR PACIENTE
+============================ */
+
+function encaminhar(numero) {
+
+
+  if (!paciente) {
+
+    alert(
+      "⚠️ Nenhum paciente foi selecionado."
+    );
+
+    return;
+
+  }
+
+
+  const confirmar =
+    confirm(
+
+      "Deseja encaminhar " +
+      paciente +
+      " para o Quarto " +
+      numero +
+      "?"
+
+    );
+
+
+  if (!confirmar) {
+
+    return;
+
+  }
+
+
+  const quarto =
+    quartos.find(
+      q => q.numero === numero
+    );
+
+
+  if (!quarto) {
+
+    alert(
+      "❌ Quarto não encontrado."
+    );
+
+    return;
+
+  }
+
+
+  if (quarto.status === "ocupado") {
+
+    alert(
+      "⚠️ Esse quarto já está ocupado."
+    );
+
+    carregarQuartos();
+
+    return;
+
+  }
+
+
+  quarto.status = "ocupado";
+
+  quarto.paciente = paciente;
+
+
+  salvarQuartos();
+
+  carregarQuartos();
+
+
+  alert(
+
+    "✅ " +
+    paciente +
+    " foi encaminhado para o Quarto " +
+    numero +
+    "!"
+
+  );
+
+}
+
+
+/* ============================
+   LIBERAR QUARTO
+============================ */
+
+function liberarQuarto(numero) {
+
+
+  const quarto =
+    quartos.find(
+      q => q.numero === numero
+    );
+
+
+  if (!quarto) {
+
+    return;
+
+  }
+
+
+  const confirmar =
+    confirm(
+
+      "Deseja liberar o Quarto " +
+      numero +
+      "?"
+
+    );
+
+
+  if (!confirmar) {
+
+    return;
+
+  }
+
+
+  quarto.status = "vazio";
+
+  quarto.paciente = "";
+
+
+  salvarQuartos();
+
+  carregarQuartos();
+
+
+  alert(
+    "✅ Quarto " +
+    numero +
+    " liberado!"
+  );
+
+}
+
+
+/* ============================
+   INICIAR
+============================ */
+
+carregarQuartos();
+
+</script>
+
+</body>
+
+</html>
