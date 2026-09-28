@@ -1,0 +1,13 @@
+services:
+ 
+  app:
+    build: .
+    container_name: projeto-hospital
+    ports:
+      - "3010:3002"
+    volumes:
+      - dados_painel:/app/backend/data
+ 
+volumes:
+ 
+  dados_hospital:
