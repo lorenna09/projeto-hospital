@@ -1,132 +1,108 @@
 
 <script>
-async function salvar() {
-  const resultado = document.getElementById("resultado");
-  const botao = document.querySelector("button");
+function classificarRisco(sintoma, temperatura, observacao) {
+  const relato = (observacao || "").toLowerCase();
 
-  const dados = {
-    nomeAnimal: document.getElementById("nomeAnimal").value,
-    especie: document.getElementById("especie").value,
-    raca: document.getElementById("raca").value,
-    dataNascimento: document.getElementById("dataNascimento").value,
-    sexo: document.getElementById("sexo").value,
-    peso: document.getElementById("peso").value,
-    cor: document.getElementById("cor").value,
-    tipoSanguineo: document.getElementById("tipoSanguineo").value,
-    sintoma: document.getElementById("sintoma").value,
-    temperatura: document.getElementById("temp").value,
-    alergia: document.getElementById("alergia").value,
-    observacao: document.getElementById("observacao").value
-  };
+  const emergencia = [
+    "falta_ar",
+    "convulsao",
+    "hemorragia"
+  ];
 
-  if (!dados.nomeAnimal || !dados.especie || !dados.sintoma) {
-    alert("Preencha o nome, a espécie e o problema do animal.");
-    return;
+  const sinaisGraves = [
+    "dificuldade para respirar",
+    "não consegue respirar",
+    "nao consegue respirar",
+    "sangramento intenso",
+    "inconsciente",
+    "desmaiou",
+    "veneno",
+    "intoxicação",
+    "intoxicacao"
+  ];
+
+  if (
+    emergencia.includes(sintoma) ||
+    sinaisGraves.some(sinal => relato.includes(sinal))
+  ) {
+    return "vermelho";
   }
 
-  // A chave é solicitada durante a execução e não é salva no navegador.
-  const chave = prompt("Digite sua chave de API para testar a IA:");
-  if (!chave) return;
+  if (temperatura && temperatura >= 40) {
+    return "vermelho";
+  }
 
-  botao.disabled = true;
-  botao.textContent = "IA analisando os sintomas...";
+  if (temperatura && temperatura >= 39) {
+    return "amarelo";
+  }
 
-  resultado.style.display = "block";
-  resultado.className = "amarelo";
-  resultado.textContent = "Interpretando os dados do animal...";
+  if (
+    ["febre", "vomito", "diarreia", "acidente", "dor"].includes(sintoma)
+  ) {
+    return "amarelo";
+  }
+
+  return "verde";
+}
+
+async function salvar() {
+  const resultado = document.getElementById("resultado");
 
   try {
-    const respostaIA = await fetch("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + chave
-      },
-      body: JSON.stringify({
-        model: "gpt-5-mini",
-        instructions:
-          "Você auxilia na triagem veterinária. Analise os dados fornecidos. " +
-          "Classifique como vermelho (possível emergência), amarelo " +
-          "(avaliação veterinária rápida) ou verde (sem sinais de emergência " +
-          "descritos, sem garantir que esteja saudável). Não diagnostique, " +
-          "não prescreva medicamentos. Dificuldade respiratória, convulsões " +
-          "e hemorragia exigem atendimento urgente. A classificação é apenas " +
-          "apoio e não substitui um veterinário. Responda em português e " +
-          "use exatamente o formato: RISCO: vermelho/amarelo/verde, " +
-          "seguido de JUSTIFICATIVA: e RECOMENDAÇÃO:.",
-        input: JSON.stringify(dados),
-        max_output_tokens: 250
-      })
-    });
+    const dados = {
+      nomeAnimal: document.getElementById("nomeAnimal").value.trim(),
+      especie: document.getElementById("especie").value,
+      raca: document.getElementById("raca").value,
+      dataNascimento: document.getElementById("dataNascimento").value,
+      sexo: document.getElementById("sexo").value,
+      peso: document.getElementById("peso").value,
+      cor: document.getElementById("cor").value,
+      tipoSanguineo: document.getElementById("tipoSanguineo").value,
+      sintoma: document.getElementById("sintoma").value,
+      temperatura: Number(document.getElementById("temp").value) || null,
+      alergia: document.getElementById("alergia").value,
+      observacao: document.getElementById("observacao").value.trim()
+    };
 
-    const retornoIA = await respostaIA.json();
-
-    if (!respostaIA.ok) {
-      throw new Error(
-        retornoIA.error?.message || "Falha ao consultar o serviço de IA."
-      );
+    if (!dados.nomeAnimal || !dados.especie || !dados.sintoma) {
+      alert("Preencha o nome, a espécie e o problema do animal.");
+      return;
     }
 
-    const texto = retornoIA.output
-      ?.flatMap(item => item.content || [])
-      .filter(item => item.type === "output_text")
-      .map(item => item.text)
-      .join("\n") || "";
-
-    const correspondencia = texto.match(
-      /RISCO:\s*(vermelho|amarelo|verde)/i
+    const risco = classificarRisco(
+      dados.sintoma,
+      dados.temperatura,
+      dados.observacao
     );
 
-    if (!correspondencia) {
-      throw new Error("A IA não retornou uma classificação válida.");
-    }
-
-    let risco = correspondencia[1].toLowerCase();
-
-    // Sinais de emergência não podem ser rebaixados pela IA.
-    const sintoma = dados.sintoma;
-    const relato = dados.observacao.toLowerCase();
-
-    const emergencia =
-      ["falta_ar", "convulsao", "hemorragia"].includes(sintoma) ||
-      /dificuldade para respirar|não consegue respirar|convulsão|hemorragia|sangramento intenso|inconsciente/.test(relato);
-
-    if (emergencia) risco = "vermelho";
-
     dados.risco = risco;
-    dados.justificativaRisco = texto;
 
     resultado.className = risco;
     resultado.textContent =
-      "CLASSIFICAÇÃO: " + risco.toUpperCase() + "\n\n" + texto;
+      "Classificação de risco: " + risco.toUpperCase();
+    resultado.style.display = "block";
 
-    resultado.style.whiteSpace = "pre-line";
-
-    // Tenta salvar no endpoint de triagem que seu projeto já utiliza.
     try {
-      const respostaSalvar = await fetch("http://localhost:3000/triagem", {
+      const resposta = await fetch("http://localhost:3000/triagem", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dados)
       });
 
-      if (!respostaSalvar.ok) {
-        resultado.textContent +=
-          "\n\nA análise foi concluída, mas não foi possível salvar no servidor.";
+      if (!resposta.ok) {
+        throw new Error("Servidor indisponível.");
       }
-    } catch {
-      resultado.textContent +=
-        "\n\nA análise foi concluída, mas o servidor de salvamento está indisponível.";
-    }
 
+      alert("Triagem classificada e salva com sucesso!");
+    } catch (erroServidor) {
+      alert(
+        "Risco classificado na página, mas não foi possível salvar. " +
+        "Verifique se o servidor está ligado."
+      );
+    }
   } catch (erro) {
     console.error(erro);
-    resultado.className = "amarelo";
-    resultado.textContent =
-      "Não foi possível concluir a análise: " + erro.message;
-  } finally {
-    botao.disabled = false;
-    botao.textContent = "🐾 Salvar Triagem";
+    alert("Ocorreu um erro. Abra o console do navegador para verificar.");
   }
 }
 </script>
