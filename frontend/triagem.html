@@ -1,263 +1,51 @@
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Triagem Veterinária com IA</title>
+<script type="module">
+import { pipeline, env } from
+  "https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2";
 
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #DCEEFF;
-  margin: 0;
-  color: #333;
+const botao = document.getElementById("btnSalvar");
+const resultado = document.getElementById("resultado");
+
+let classificador = null;
+
+async function carregarIA() {
+  if (!classificador) {
+    resultado.style.display = "block";
+    resultado.className = "amarelo";
+    resultado.textContent =
+      "Carregando o modelo de IA pela primeira vez. Aguarde...";
+
+    classificador = await pipeline(
+      "zero-shot-classification",
+      "Xenova/mobilebert-uncased-mnli",
+      { quantized: true }
+    );
+  }
+  return classificador;
 }
 
-.container {
-  width: 90%;
-  max-width: 900px;
-  margin: 40px auto;
-  background: white;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 5px 20px rgba(0,0,0,.1);
-  box-sizing: border-box;
-}
+function detectarEmergencia(texto, sintoma) {
+  const textoNormalizado = texto.toLowerCase();
 
-h2, h3 { color: #2C5D8A; }
-
-h2 {
-  text-align: center;
-  margin-bottom: 25px;
-}
-
-input, select, textarea {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 15px;
-}
-
-textarea {
-  min-height: 100px;
-  resize: vertical;
-}
-
-button {
-  width: 100%;
-  padding: 13px;
-  margin-top: 20px;
-  background: #5B9BD5;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-button:hover { background: #468CC7; }
-button:disabled { opacity: .6; cursor: wait; }
-
-#resultado {
-  display: none;
-  margin-top: 20px;
-  padding: 18px;
-  border-radius: 8px;
-  line-height: 1.6;
-}
-
-.verde {
-  background: #D8F3DC;
-  border-left: 6px solid #239447;
-}
-
-.amarelo {
-  background: #FFF0B3;
-  border-left: 6px solid #D5A000;
-}
-
-.vermelho {
-  background: #FFE0E0;
-  border-left: 6px solid #D93025;
-}
-
-.aviso {
-  font-size: 13px;
-  color: #555;
-  margin-top: 18px;
-}
-</style>
-</head>
-
-<body>
-<div class="container">
-
-<h2>🐾 Triagem Veterinária Inteligente</h2>
-
-<h3>🐶 Dados do Animal</h3>
-
-<input id="nomeAnimal" placeholder="Nome do animal" required>
-
-<select id="especie" required>
-  <option value="">Selecione a espécie</option>
-  <option value="Cachorro">Cachorro</option>
-  <option value="Gato">Gato</option>
-  <option value="Coelho">Coelho</option>
-  <option value="Ave">Ave</option>
-  <option value="Outro">Outro</option>
-</select>
-
-<select id="raca">
-  <option value="">Selecione a raça</option>
-  <option>Labrador</option>
-  <option>Golden Retriever</option>
-  <option>Poodle</option>
-  <option>Shih-tzu</option>
-  <option>Yorkshire</option>
-  <option>Bulldog Francês</option>
-  <option>Pastor Alemão</option>
-  <option>Rottweiler</option>
-  <option>Pinscher</option>
-  <option>Chihuahua</option>
-  <option>Dachshund</option>
-  <option>Beagle</option>
-  <option>Husky Siberiano</option>
-  <option>Border Collie</option>
-  <option>Vira-lata (SRD)</option>
-  <option>Outra</option>
-</select>
-
-<label for="dataNascimento">Data de nascimento</label>
-<input id="dataNascimento" type="date">
-
-<select id="sexo">
-  <option value="">Selecione o sexo</option>
-  <option value="Macho">Macho</option>
-  <option value="Fêmea">Fêmea</option>
-</select>
-
-<input id="peso" type="number" min="0" step="0.1" placeholder="Peso (kg)">
-
-<select id="cor">
-  <option value="">Selecione a cor do pelo</option>
-  <option>Preto</option>
-  <option>Branco</option>
-  <option>Marrom</option>
-  <option>Caramelo</option>
-  <option>Cinza</option>
-  <option>Bege</option>
-  <option>Dourado</option>
-  <option>Creme</option>
-  <option>Preto e branco</option>
-  <option>Marrom e branco</option>
-  <option>Tricolor</option>
-  <option>Outra</option>
-</select>
-
-<select id="tipoSanguineo">
-  <option value="">Tipo sanguíneo</option>
-  <option value="DEA 1 positivo">DEA 1 positivo (cães)</option>
-  <option value="DEA 1 negativo">DEA 1 negativo (cães)</option>
-  <option value="Desconhecido">Desconhecido</option>
-</select>
-
-<h3>🩺 Informações de Saúde</h3>
-
-<select id="sintoma" required>
-  <option value="">Selecione o problema</option>
-  <option value="dor">Dor</option>
-  <option value="febre">Febre</option>
-  <option value="vomito">Vômito</option>
-  <option value="diarreia">Diarreia</option>
-  <option value="falta_ar">Dificuldade para respirar</option>
-  <option value="convulsao">Convulsão</option>
-  <option value="hemorragia">Hemorragia</option>
-  <option value="acidente">Acidente</option>
-  <option value="outro">Outro</option>
-</select>
-
-<select id="alergia">
-  <option value="">Selecione a alergia</option>
-  <option value="Nenhuma">Nenhuma alergia conhecida</option>
-  <option>Ração</option>
-  <option>Frango</option>
-  <option>Carne bovina</option>
-  <option>Leite</option>
-  <option>Pulgas</option>
-  <option>Medicamentos</option>
-  <option>Pólen</option>
-  <option>Poeira</option>
-  <option>Plantas</option>
-  <option>Outra</option>
-</select>
-
-<input id="temp" type="number" step="0.1" placeholder="Temperatura (°C)">
-
-<textarea id="observacao"
-  placeholder="Descreva os sintomas, quando começaram e o comportamento do animal"></textarea>
-
-<div id="resultado" aria-live="polite"></div>
-
-<button id="btnSalvar" onclick="salvar()">
-  🐾 Analisar e Salvar Triagem
-</button>
-
-<p class="aviso">
-A classificação é um apoio à triagem e não substitui a avaliação
-veterinária. Em caso de sinais graves, procure atendimento de emergência
-sem esperar pela análise automatizada.
-</p>
-
-</div>
-
-<script>
-// Configure aqui a URL de um serviço seguro que integre a IA.
-// O serviço deve receber os dados da triagem e devolver:
-// { "risco": "verde|amarelo|vermelho",
-//   "justificativa": "explicação",
-//   "sinaisAlerta": [] }
-//
-// Não coloque sua chave privada da OpenAI neste arquivo HTML.
-const URL_IA = "/api/triagem/interpretar";
-
-// Alertas básicos de segurança: não dependem da resposta da IA.
-function detectarEmergencia(dados) {
-  const texto = dados.observacao.normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "").toLowerCase();
-
-  const sinais = [
+  const sintomasGraves = [
     "dificuldade para respirar",
-    "nao consegue respirar",
-    "convulsao",
+    "não consegue respirar",
+    "convulsão",
     "sangramento intenso",
-    "hemorragia intensa",
     "inconsciente",
     "desmaiou",
-    "gengiva azulada",
+    "gengiva azul",
     "veneno",
-    "intoxicacao"
+    "intoxicação"
   ];
 
-  const encontrados = sinais.filter(s => texto.includes(s));
-
-  if (dados.sintoma === "falta_ar" ||
-      dados.sintoma === "convulsao" ||
-      dados.sintoma === "hemorragia" ||
-      encontrados.length > 0) {
-    return encontrados;
-  }
-
-  return [];
+  return (
+    ["falta_ar", "convulsao", "hemorragia"].includes(sintoma) ||
+    sintomasGraves.some(s => textoNormalizado.includes(s))
+  );
 }
 
 async function salvar() {
-  const botao = document.getElementById("btnSalvar");
-  const resultado = document.getElementById("resultado");
-
   const dados = {
     nomeAnimal: document.getElementById("nomeAnimal").value.trim(),
     especie: document.getElementById("especie").value,
@@ -268,9 +56,8 @@ async function salvar() {
     cor: document.getElementById("cor").value,
     tipoSanguineo: document.getElementById("tipoSanguineo").value,
     sintoma: document.getElementById("sintoma").value,
-    temperatura: document.getElementById("temp").value === ""
-      ? null : Number(document.getElementById("temp").value),
     alergia: document.getElementById("alergia").value,
+    temperatura: document.getElementById("temp").value,
     observacao: document.getElementById("observacao").value.trim()
   };
 
@@ -281,59 +68,49 @@ async function salvar() {
 
   botao.disabled = true;
   botao.textContent = "Analisando com IA...";
-  resultado.style.display = "block";
-  resultado.className = "amarelo";
-  resultado.textContent = "Aguardando análise...";
 
   try {
-    // A IA deve estar conectada a esta rota para responder.
-    const resposta = await fetch(URL_IA, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(dados)
-    });
+    const ia = await carregarIA();
 
-    if (!resposta.ok) {
-      throw new Error(
-        "O serviço de IA não está configurado ou está indisponível."
-      );
+    const texto = `
+      Espécie: ${dados.especie}.
+      Sintoma selecionado: ${dados.sintoma}.
+      Temperatura: ${dados.temperatura || "não informada"} °C.
+      Alergias: ${dados.alergia || "não informadas"}.
+      Observações: ${dados.observacao || "nenhuma"}.
+    `;
+
+    const analise = await ia(texto, [
+      "emergência veterinária com risco imediato",
+      "caso veterinário que precisa de avaliação rápida",
+      "caso veterinário aparentemente estável"
+    ]);
+
+    let risco = "amarelo";
+    let justificativa = "A IA não consegue confirmar a gravidade apenas pelo formulário. Procure orientação veterinária.";
+
+    const classe = analise.labels[0];
+
+    if (classe.includes("emergência")) {
+      risco = "vermelho";
+      justificativa = "A análise identificou características que podem indicar emergência. Procure atendimento veterinário imediatamente.";
+    } else if (classe.includes("estável")) {
+      risco = "verde";
+      justificativa = "O modelo classificou o relato como aparentemente estável. Isso não descarta doenças nem substitui avaliação veterinária.";
+    } else {
+      risco = "amarelo";
+      justificativa = "O relato pode exigir avaliação veterinária rápida. A gravidade precisa ser confirmada por um profissional.";
     }
 
-    const analise = await resposta.json();
-    const niveis = ["verde", "amarelo", "vermelho"];
-
-    if (!niveis.includes(analise.risco) ||
-        typeof analise.justificativa !== "string") {
-      throw new Error("A resposta da IA é inválida.");
+    if (detectarEmergencia(texto, dados.sintoma)) {
+      risco = "vermelho";
+      justificativa = "Foi identificado um sinal potencialmente grave. Procure atendimento veterinário de emergência.";
     }
 
-    const emergencias = detectarEmergencia(dados);
+    dados.risco = risco;
+    dados.justificativaRisco = justificativa;
+    dados.confiancaModelo = analise.scores[0];
 
-    // A IA nunca deve rebaixar um sinal de emergência reconhecido.
-    if (emergencias.length > 0) {
-      analise.risco = "vermelho";
-      analise.justificativa =
-        "Foram identificados sinais potencialmente graves. " +
-        "Procure atendimento veterinário de emergência.";
-    }
-
-    dados.risco = analise.risco;
-    dados.justificativaRisco = analise.justificativa;
-    dados.sinaisAlerta = analise.sinaisAlerta || [];
-
-    resultado.className = analise.risco;
-    resultado.replaceChildren();
-
-    const titulo = document.createElement("h3");
-    titulo.textContent =
-      "Índice de risco: " + analise.risco.toUpperCase();
-
-    const explicacao = document.createElement("p");
-    explicacao.textContent = analise.justificativa;
-
-    resultado.append(titulo, explicacao);
-
-    // Salva uma cópia local no navegador.
     const historico = JSON.parse(
       localStorage.getItem("triagensVeterinarias") || "[]"
     );
@@ -348,25 +125,29 @@ async function salvar() {
       JSON.stringify(historico)
     );
 
-    alert("Análise concluída e triagem salva neste navegador.");
+    resultado.className = risco;
+    resultado.replaceChildren();
+
+    const titulo = document.createElement("h3");
+    titulo.textContent = "Índice de risco: " + risco.toUpperCase();
+
+    const explicacao = document.createElement("p");
+    explicacao.textContent = justificativa;
+
+    resultado.append(titulo, explicacao);
+    resultado.style.display = "block";
 
   } catch (erro) {
     console.error(erro);
+    resultado.style.display = "block";
     resultado.className = "amarelo";
     resultado.textContent =
-      erro.message +
-      " A triagem não foi classificada pela IA. " +
-      "Não interprete esta falha como baixo risco.";
-
-    alert(
-      "Não foi possível concluir a análise por IA. " +
-      "Verifique a conexão e a configuração do serviço."
-    );
+      "Não foi possível carregar a IA. Verifique a internet e abra a página por um servidor local. A classificação não foi concluída.";
   } finally {
     botao.disabled = false;
     botao.textContent = "🐾 Analisar e Salvar Triagem";
   }
 }
+
+window.salvar = salvar;
 </script>
-</body>
-</html>
