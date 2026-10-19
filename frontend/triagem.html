@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Triagem Veterinária Inteligente</title>
+<title>Triagem Veterinária com IA</title>
 
 <style>
 body {
@@ -21,13 +21,11 @@ body {
   background: white;
   padding: 30px;
   border-radius: 15px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 20px rgba(0,0,0,.1);
   box-sizing: border-box;
 }
 
-h2, h3 {
-  color: #2C5D8A;
-}
+h2, h3 { color: #2C5D8A; }
 
 h2 {
   text-align: center;
@@ -61,14 +59,8 @@ button {
   cursor: pointer;
 }
 
-button:hover {
-  background: #468CC7;
-}
-
-button:disabled {
-  opacity: 0.6;
-  cursor: wait;
-}
+button:hover { background: #468CC7; }
+button:disabled { opacity: .6; cursor: wait; }
 
 #resultado {
   display: none;
@@ -76,10 +68,6 @@ button:disabled {
   padding: 18px;
   border-radius: 8px;
   line-height: 1.6;
-}
-
-#resultado h3 {
-  margin-top: 0;
 }
 
 .verde {
@@ -102,7 +90,6 @@ button:disabled {
   color: #555;
   margin-top: 18px;
 }
-
 </style>
 </head>
 
@@ -113,9 +100,9 @@ button:disabled {
 
 <h3>🐶 Dados do Animal</h3>
 
-<input id="nomeAnimal" placeholder="Nome do animal">
+<input id="nomeAnimal" placeholder="Nome do animal" required>
 
-<select id="especie">
+<select id="especie" required>
   <option value="">Selecione a espécie</option>
   <option value="Cachorro">Cachorro</option>
   <option value="Gato">Gato</option>
@@ -144,7 +131,8 @@ button:disabled {
   <option>Outra</option>
 </select>
 
-<input id="dataNascimento" type="date" title="Data de nascimento">
+<label for="dataNascimento">Data de nascimento</label>
+<input id="dataNascimento" type="date">
 
 <select id="sexo">
   <option value="">Selecione o sexo</option>
@@ -152,7 +140,7 @@ button:disabled {
   <option value="Fêmea">Fêmea</option>
 </select>
 
-<input id="peso" type="number" step="0.1" min="0" placeholder="Peso (kg)">
+<input id="peso" type="number" min="0" step="0.1" placeholder="Peso (kg)">
 
 <select id="cor">
   <option value="">Selecione a cor do pelo</option>
@@ -179,7 +167,7 @@ button:disabled {
 
 <h3>🩺 Informações de Saúde</h3>
 
-<select id="sintoma">
+<select id="sintoma" required>
   <option value="">Selecione o problema</option>
   <option value="dor">Dor</option>
   <option value="febre">Febre</option>
@@ -210,7 +198,7 @@ button:disabled {
 <input id="temp" type="number" step="0.1" placeholder="Temperatura (°C)">
 
 <textarea id="observacao"
-placeholder="Descreva os sintomas, há quanto tempo começaram e o comportamento do animal"></textarea>
+  placeholder="Descreva os sintomas, quando começaram e o comportamento do animal"></textarea>
 
 <div id="resultado" aria-live="polite"></div>
 
@@ -219,102 +207,51 @@ placeholder="Descreva os sintomas, há quanto tempo começaram e o comportamento
 </button>
 
 <p class="aviso">
-Esta ferramenta utiliza regras automáticas, não uma IA generativa.
-Não substitui a avaliação de um médico-veterinário. Em caso de
-dificuldade respiratória, convulsão, hemorragia importante ou
-outros sinais graves, procure atendimento veterinário de emergência.
+A classificação é um apoio à triagem e não substitui a avaliação
+veterinária. Em caso de sinais graves, procure atendimento de emergência
+sem esperar pela análise automatizada.
 </p>
 
 </div>
 
 <script>
-function analisarRisco(dados) {
-  const texto = (
-    dados.sintoma + " " + dados.observacao
-  ).normalize("NFD")
-   .replace(/[\u0300-\u036f]/g, "")
-   .toLowerCase();
+// Configure aqui a URL de um serviço seguro que integre a IA.
+// O serviço deve receber os dados da triagem e devolver:
+// { "risco": "verde|amarelo|vermelho",
+//   "justificativa": "explicação",
+//   "sinaisAlerta": [] }
+//
+// Não coloque sua chave privada da OpenAI neste arquivo HTML.
+const URL_IA = "/api/triagem/interpretar";
 
-  const alertasGraves = [
+// Alertas básicos de segurança: não dependem da resposta da IA.
+function detectarEmergencia(dados) {
+  const texto = dados.observacao.normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+  const sinais = [
     "dificuldade para respirar",
     "nao consegue respirar",
-    "falta de ar",
-    "respiracao muito dificil",
     "convulsao",
-    "convulsionando",
-    "hemorragia intensa",
     "sangramento intenso",
-    "sangrando muito",
-    "desmaiou",
+    "hemorragia intensa",
     "inconsciente",
+    "desmaiou",
     "gengiva azulada",
-    "gengiva branca",
-    "nao consegue urinar",
-    "atropelado",
     "veneno",
     "intoxicacao"
   ];
 
-  const alertasModerados = [
-    "vomito",
-    "vomitando",
-    "diarreia",
-    "febre",
-    "dor",
-    "mancando",
-    "sem comer",
-    "nao quer comer",
-    "prostrado",
-    "apatico",
-    "coceira intensa",
-    "inchaco"
-  ];
+  const encontrados = sinais.filter(s => texto.includes(s));
 
-  const sinaisAlerta = alertasGraves.filter(sinal =>
-    texto.includes(sinal)
-  );
-
-  let risco = "verde";
-  let justificativa =
-    "Nenhum sinal de emergência reconhecido pelas regras foi identificado. Isso não garante que o animal esteja bem.";
-
-  if (
-    ["falta_ar", "convulsao", "hemorragia"].includes(dados.sintoma) ||
-    sinaisAlerta.length > 0
-  ) {
-    risco = "vermelho";
-    justificativa =
-      "Foram identificados sinais potencialmente graves. " +
-      "O animal precisa de avaliação veterinária de emergência.";
-  } else if (
-    ["febre", "vomito", "diarreia", "acidente", "dor"].includes(dados.sintoma) ||
-    alertasModerados.some(sinal => texto.includes(sinal))
-  ) {
-    risco = "amarelo";
-    justificativa =
-      "Os sintomas informados precisam de avaliação veterinária rápida. " +
-      "A gravidade depende do exame clínico e do contexto.";
+  if (dados.sintoma === "falta_ar" ||
+      dados.sintoma === "convulsao" ||
+      dados.sintoma === "hemorragia" ||
+      encontrados.length > 0) {
+    return encontrados;
   }
 
-  const temperatura = dados.temperatura;
-  if (temperatura !== null && temperatura > 0) {
-    if (temperatura >= 40 || temperatura < 35) {
-      risco = "vermelho";
-      justificativa =
-        "A temperatura informada é potencialmente preocupante. " +
-        "Confirme a medição e procure atendimento veterinário urgente.";
-    } else if (temperatura >= 39.5) {
-      if (risco !== "vermelho") risco = "amarelo";
-      justificativa +=
-        " A temperatura também merece avaliação veterinária.";
-    }
-  }
-
-  return {
-    risco,
-    justificativa,
-    sinaisAlerta
-  };
+  return [];
 }
 
 async function salvar() {
@@ -332,8 +269,7 @@ async function salvar() {
     tipoSanguineo: document.getElementById("tipoSanguineo").value,
     sintoma: document.getElementById("sintoma").value,
     temperatura: document.getElementById("temp").value === ""
-      ? null
-      : Number(document.getElementById("temp").value),
+      ? null : Number(document.getElementById("temp").value),
     alergia: document.getElementById("alergia").value,
     observacao: document.getElementById("observacao").value.trim()
   };
@@ -343,54 +279,61 @@ async function salvar() {
     return;
   }
 
-  if (
-    dados.temperatura !== null &&
-    (!Number.isFinite(dados.temperatura) ||
-      dados.temperatura <= 0 || dados.temperatura > 50)
-  ) {
-    alert("Verifique a temperatura informada.");
-    return;
-  }
-
   botao.disabled = true;
-  botao.textContent = "Analisando...";
+  botao.textContent = "Analisando com IA...";
   resultado.style.display = "block";
-  resultado.className = "";
-  resultado.textContent = "Analisando os sintomas informados...";
+  resultado.className = "amarelo";
+  resultado.textContent = "Aguardando análise...";
 
   try {
-    const analise = analisarRisco(dados);
+    // A IA deve estar conectada a esta rota para responder.
+    const resposta = await fetch(URL_IA, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dados)
+    });
+
+    if (!resposta.ok) {
+      throw new Error(
+        "O serviço de IA não está configurado ou está indisponível."
+      );
+    }
+
+    const analise = await resposta.json();
+    const niveis = ["verde", "amarelo", "vermelho"];
+
+    if (!niveis.includes(analise.risco) ||
+        typeof analise.justificativa !== "string") {
+      throw new Error("A resposta da IA é inválida.");
+    }
+
+    const emergencias = detectarEmergencia(dados);
+
+    // A IA nunca deve rebaixar um sinal de emergência reconhecido.
+    if (emergencias.length > 0) {
+      analise.risco = "vermelho";
+      analise.justificativa =
+        "Foram identificados sinais potencialmente graves. " +
+        "Procure atendimento veterinário de emergência.";
+    }
+
     dados.risco = analise.risco;
     dados.justificativaRisco = analise.justificativa;
-    dados.sinaisAlerta = analise.sinaisAlerta;
+    dados.sinaisAlerta = analise.sinaisAlerta || [];
 
     resultado.className = analise.risco;
+    resultado.replaceChildren();
 
     const titulo = document.createElement("h3");
     titulo.textContent =
-      "Classificação sugerida: " + analise.risco.toUpperCase();
+      "Índice de risco: " + analise.risco.toUpperCase();
 
     const explicacao = document.createElement("p");
     explicacao.textContent = analise.justificativa;
 
-    resultado.replaceChildren(titulo, explicacao);
+    resultado.append(titulo, explicacao);
 
-    if (analise.sinaisAlerta.length) {
-      const lista = document.createElement("p");
-      lista.textContent =
-        "Sinais de alerta reconhecidos: " +
-        analise.sinaisAlerta.join(", ");
-      resultado.appendChild(lista);
-    }
-
-    const aviso = document.createElement("p");
-    aviso.textContent =
-      "Esta classificação é automática e pode não reconhecer todos os sinais. " +
-      "Procure um veterinário para avaliação.";
-    resultado.appendChild(aviso);
-
-    // Sem backend, os dados são salvos neste navegador.
-    // Eles não são enviados automaticamente para o servidor.
+    // Salva uma cópia local no navegador.
     const historico = JSON.parse(
       localStorage.getItem("triagensVeterinarias") || "[]"
     );
@@ -405,11 +348,20 @@ async function salvar() {
       JSON.stringify(historico)
     );
 
-    alert("Triagem analisada e salva neste navegador!");
+    alert("Análise concluída e triagem salva neste navegador.");
 
   } catch (erro) {
     console.error(erro);
-    alert("Não foi possível concluir a triagem neste navegador.");
+    resultado.className = "amarelo";
+    resultado.textContent =
+      erro.message +
+      " A triagem não foi classificada pela IA. " +
+      "Não interprete esta falha como baixo risco.";
+
+    alert(
+      "Não foi possível concluir a análise por IA. " +
+      "Verifique a conexão e a configuração do serviço."
+    );
   } finally {
     botao.disabled = false;
     botao.textContent = "🐾 Analisar e Salvar Triagem";
