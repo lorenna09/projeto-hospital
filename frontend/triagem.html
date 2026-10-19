@@ -1,6 +1,324 @@
 
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triagem Veterinária Inteligente</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #DCEEFF;
+  margin: 0;
+  color: #333;
+}
+
+.container {
+  width: 90%;
+  max-width: 900px;
+  margin: 40px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+}
+
+h2, h3 {
+  color: #2C5D8A;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+input, select, textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+button {
+  width: 100%;
+  padding: 13px;
+  margin-top: 20px;
+  background: #5B9BD5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #468CC7;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+#resultado {
+  display: none;
+  margin-top: 20px;
+  padding: 18px;
+  border-radius: 8px;
+  line-height: 1.6;
+}
+
+#resultado h3 {
+  margin-top: 0;
+}
+
+.verde {
+  background: #D8F3DC;
+  border-left: 6px solid #239447;
+}
+
+.amarelo {
+  background: #FFF0B3;
+  border-left: 6px solid #D5A000;
+}
+
+.vermelho {
+  background: #FFE0E0;
+  border-left: 6px solid #D93025;
+}
+
+.aviso {
+  font-size: 13px;
+  color: #555;
+  margin-top: 18px;
+}
+
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h2>🐾 Triagem Veterinária Inteligente</h2>
+
+<h3>🐶 Dados do Animal</h3>
+
+<input id="nomeAnimal" placeholder="Nome do animal">
+
+<select id="especie">
+  <option value="">Selecione a espécie</option>
+  <option value="Cachorro">Cachorro</option>
+  <option value="Gato">Gato</option>
+  <option value="Coelho">Coelho</option>
+  <option value="Ave">Ave</option>
+  <option value="Outro">Outro</option>
+</select>
+
+<select id="raca">
+  <option value="">Selecione a raça</option>
+  <option>Labrador</option>
+  <option>Golden Retriever</option>
+  <option>Poodle</option>
+  <option>Shih-tzu</option>
+  <option>Yorkshire</option>
+  <option>Bulldog Francês</option>
+  <option>Pastor Alemão</option>
+  <option>Rottweiler</option>
+  <option>Pinscher</option>
+  <option>Chihuahua</option>
+  <option>Dachshund</option>
+  <option>Beagle</option>
+  <option>Husky Siberiano</option>
+  <option>Border Collie</option>
+  <option>Vira-lata (SRD)</option>
+  <option>Outra</option>
+</select>
+
+<input id="dataNascimento" type="date" title="Data de nascimento">
+
+<select id="sexo">
+  <option value="">Selecione o sexo</option>
+  <option value="Macho">Macho</option>
+  <option value="Fêmea">Fêmea</option>
+</select>
+
+<input id="peso" type="number" step="0.1" min="0" placeholder="Peso (kg)">
+
+<select id="cor">
+  <option value="">Selecione a cor do pelo</option>
+  <option>Preto</option>
+  <option>Branco</option>
+  <option>Marrom</option>
+  <option>Caramelo</option>
+  <option>Cinza</option>
+  <option>Bege</option>
+  <option>Dourado</option>
+  <option>Creme</option>
+  <option>Preto e branco</option>
+  <option>Marrom e branco</option>
+  <option>Tricolor</option>
+  <option>Outra</option>
+</select>
+
+<select id="tipoSanguineo">
+  <option value="">Tipo sanguíneo</option>
+  <option value="DEA 1 positivo">DEA 1 positivo (cães)</option>
+  <option value="DEA 1 negativo">DEA 1 negativo (cães)</option>
+  <option value="Desconhecido">Desconhecido</option>
+</select>
+
+<h3>🩺 Informações de Saúde</h3>
+
+<select id="sintoma">
+  <option value="">Selecione o problema</option>
+  <option value="dor">Dor</option>
+  <option value="febre">Febre</option>
+  <option value="vomito">Vômito</option>
+  <option value="diarreia">Diarreia</option>
+  <option value="falta_ar">Dificuldade para respirar</option>
+  <option value="convulsao">Convulsão</option>
+  <option value="hemorragia">Hemorragia</option>
+  <option value="acidente">Acidente</option>
+  <option value="outro">Outro</option>
+</select>
+
+<select id="alergia">
+  <option value="">Selecione a alergia</option>
+  <option value="Nenhuma">Nenhuma alergia conhecida</option>
+  <option>Ração</option>
+  <option>Frango</option>
+  <option>Carne bovina</option>
+  <option>Leite</option>
+  <option>Pulgas</option>
+  <option>Medicamentos</option>
+  <option>Pólen</option>
+  <option>Poeira</option>
+  <option>Plantas</option>
+  <option>Outra</option>
+</select>
+
+<input id="temp" type="number" step="0.1" placeholder="Temperatura (°C)">
+
+<textarea id="observacao"
+placeholder="Descreva os sintomas, há quanto tempo começaram e o comportamento do animal"></textarea>
+
+<div id="resultado" aria-live="polite"></div>
+
+<button id="btnSalvar" onclick="salvar()">
+  🐾 Analisar e Salvar Triagem
+</button>
+
+<p class="aviso">
+Esta ferramenta utiliza regras automáticas, não uma IA generativa.
+Não substitui a avaliação de um médico-veterinário. Em caso de
+dificuldade respiratória, convulsão, hemorragia importante ou
+outros sinais graves, procure atendimento veterinário de emergência.
+</p>
+
+</div>
+
 <script>
+function analisarRisco(dados) {
+  const texto = (
+    dados.sintoma + " " + dados.observacao
+  ).normalize("NFD")
+   .replace(/[\u0300-\u036f]/g, "")
+   .toLowerCase();
+
+  const alertasGraves = [
+    "dificuldade para respirar",
+    "nao consegue respirar",
+    "falta de ar",
+    "respiracao muito dificil",
+    "convulsao",
+    "convulsionando",
+    "hemorragia intensa",
+    "sangramento intenso",
+    "sangrando muito",
+    "desmaiou",
+    "inconsciente",
+    "gengiva azulada",
+    "gengiva branca",
+    "nao consegue urinar",
+    "atropelado",
+    "veneno",
+    "intoxicacao"
+  ];
+
+  const alertasModerados = [
+    "vomito",
+    "vomitando",
+    "diarreia",
+    "febre",
+    "dor",
+    "mancando",
+    "sem comer",
+    "nao quer comer",
+    "prostrado",
+    "apatico",
+    "coceira intensa",
+    "inchaco"
+  ];
+
+  const sinaisAlerta = alertasGraves.filter(sinal =>
+    texto.includes(sinal)
+  );
+
+  let risco = "verde";
+  let justificativa =
+    "Nenhum sinal de emergência reconhecido pelas regras foi identificado. Isso não garante que o animal esteja bem.";
+
+  if (
+    ["falta_ar", "convulsao", "hemorragia"].includes(dados.sintoma) ||
+    sinaisAlerta.length > 0
+  ) {
+    risco = "vermelho";
+    justificativa =
+      "Foram identificados sinais potencialmente graves. " +
+      "O animal precisa de avaliação veterinária de emergência.";
+  } else if (
+    ["febre", "vomito", "diarreia", "acidente", "dor"].includes(dados.sintoma) ||
+    alertasModerados.some(sinal => texto.includes(sinal))
+  ) {
+    risco = "amarelo";
+    justificativa =
+      "Os sintomas informados precisam de avaliação veterinária rápida. " +
+      "A gravidade depende do exame clínico e do contexto.";
+  }
+
+  const temperatura = dados.temperatura;
+  if (temperatura !== null && temperatura > 0) {
+    if (temperatura >= 40 || temperatura < 35) {
+      risco = "vermelho";
+      justificativa =
+        "A temperatura informada é potencialmente preocupante. " +
+        "Confirme a medição e procure atendimento veterinário urgente.";
+    } else if (temperatura >= 39.5) {
+      if (risco !== "vermelho") risco = "amarelo";
+      justificativa +=
+        " A temperatura também merece avaliação veterinária.";
+    }
+  }
+
+  return {
+    risco,
+    justificativa,
+    sinaisAlerta
+  };
+}
+
 async function salvar() {
+  const botao = document.getElementById("btnSalvar");
   const resultado = document.getElementById("resultado");
 
   const dados = {
@@ -25,95 +343,78 @@ async function salvar() {
     return;
   }
 
-  const botao = document.querySelector('button[onclick="salvar()"]');
+  if (
+    dados.temperatura !== null &&
+    (!Number.isFinite(dados.temperatura) ||
+      dados.temperatura <= 0 || dados.temperatura > 50)
+  ) {
+    alert("Verifique a temperatura informada.");
+    return;
+  }
 
   botao.disabled = true;
-  botao.textContent = "Analisando triagem...";
+  botao.textContent = "Analisando...";
+  resultado.style.display = "block";
   resultado.className = "";
-  resultado.textContent = "A IA está analisando os dados informados.";
+  resultado.textContent = "Analisando os sintomas informados...";
 
   try {
-    // 1. Solicita a análise da IA ao servidor
-    const respostaIA = await fetch(
-      "http://localhost:3000/triagem/interpretar",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dados)
-      }
-    );
-
-    const analise = await respostaIA.json();
-
-    if (!respostaIA.ok) {
-      throw new Error(analise.erro || "Não foi possível analisar a triagem.");
-    }
-
-    const niveisValidos = ["verde", "amarelo", "vermelho"];
-
-    if (!niveisValidos.includes(analise.risco)) {
-      throw new Error("A IA retornou uma classificação inválida.");
-    }
-
-    // 2. Exibe o resultado da análise
+    const analise = analisarRisco(dados);
     dados.risco = analise.risco;
     dados.justificativaRisco = analise.justificativa;
-    dados.sinaisAlerta = analise.sinaisAlerta || [];
+    dados.sinaisAlerta = analise.sinaisAlerta;
 
     resultado.className = analise.risco;
-    resultado.replaceChildren();
 
     const titulo = document.createElement("h3");
     titulo.textContent =
-      "Risco sugerido: " + analise.risco.toUpperCase();
+      "Classificação sugerida: " + analise.risco.toUpperCase();
 
-    const justificativa = document.createElement("p");
-    justificativa.textContent =
-      analise.justificativa || "Sem justificativa disponível.";
+    const explicacao = document.createElement("p");
+    explicacao.textContent = analise.justificativa;
 
-    resultado.append(titulo, justificativa);
+    resultado.replaceChildren(titulo, explicacao);
 
-    if (dados.sinaisAlerta.length > 0) {
-      const alertas = document.createElement("p");
-      alertas.textContent =
-        "Sinais de alerta: " + dados.sinaisAlerta.join(", ");
-      resultado.appendChild(alertas);
+    if (analise.sinaisAlerta.length) {
+      const lista = document.createElement("p");
+      lista.textContent =
+        "Sinais de alerta reconhecidos: " +
+        analise.sinaisAlerta.join(", ");
+      resultado.appendChild(lista);
     }
 
     const aviso = document.createElement("p");
     aviso.textContent =
-      "A classificação é um apoio à triagem e precisa ser avaliada " +
-      "por um profissional veterinário.";
+      "Esta classificação é automática e pode não reconhecer todos os sinais. " +
+      "Procure um veterinário para avaliação.";
     resultado.appendChild(aviso);
 
-    // 3. Salva os dados e a análise no sistema existente
-    const respostaSalvar = await fetch(
-      "http://localhost:3000/triagem",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dados)
-      }
+    // Sem backend, os dados são salvos neste navegador.
+    // Eles não são enviados automaticamente para o servidor.
+    const historico = JSON.parse(
+      localStorage.getItem("triagensVeterinarias") || "[]"
     );
 
-    if (!respostaSalvar.ok) {
-      throw new Error("A análise foi feita, mas não foi possível salvar a triagem.");
-    }
+    historico.push({
+      ...dados,
+      dataTriagem: new Date().toISOString()
+    });
 
-    alert("Triagem analisada e salva com sucesso!");
+    localStorage.setItem(
+      "triagensVeterinarias",
+      JSON.stringify(historico)
+    );
+
+    alert("Triagem analisada e salva neste navegador!");
 
   } catch (erro) {
-    console.error("Erro na triagem:", erro);
-
-    resultado.className = "amarelo";
-    resultado.textContent =
-      "Não foi possível concluir a análise e salvar a triagem. " +
-      "Verifique o servidor e tente novamente. " + erro.message;
-
-    alert("Erro: " + erro.message);
+    console.error(erro);
+    alert("Não foi possível concluir a triagem neste navegador.");
   } finally {
     botao.disabled = false;
-    botao.textContent = "🐾 Salvar Triagem";
+    botao.textContent = "🐾 Analisar e Salvar Triagem";
   }
 }
 </script>
+</body>
+</html>
