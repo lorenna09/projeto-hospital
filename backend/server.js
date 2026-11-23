@@ -1,3 +1,4 @@
+
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
@@ -23,9 +24,15 @@ function readDB() {
       tv_historico: []
     };
   }
+
   const db = JSON.parse(fs.readFileSync(DB_FILE));
+
+  if (!db.pacientes) db.pacientes = [];
+  if (!db.triagens) db.triagens = [];
+  if (!db.consultas) db.consultas = [];
   if (!db.tv_chamada) db.tv_chamada = null;
   if (!db.tv_historico) db.tv_historico = [];
+
   return db;
 }
 
@@ -49,7 +56,7 @@ app.post("/login", (req, res) => {
   res.json(user);
 });
 
-// ATENDIMENTO - cadastrar paciente
+// ATENDIMENTO - CADASTRAR PACIENTE
 app.post("/atendimento", (req, res) => {
   const db = readDB();
 
@@ -68,42 +75,74 @@ app.post("/atendimento", (req, res) => {
   res.json(paciente);
 });
 
-// LISTAR PACIENTES (triagem busca quem foi cadastrado no atendimento)
+// LISTAR PACIENTES
 app.get("/pacientes", (req, res) => {
   const db = readDB();
   res.json(db.pacientes);
 });
 
-// TRIAGEM
+// TRIAGEM VETERINÁRIA - SALVAR
 app.post("/triagem", (req, res) => {
-  const db = readDB();
 
-  let risco = req.body.risco;
+  try {
 
-  if (req.body.temperatura >= 39) {
-    risco = "vermelho";
-  } else if (req.body.temperatura >= 38) {
-    risco = "amarelo";
-  } else if (!risco) {
-    risco = "verde";
+    const db = readDB();
+    const dados = req.body;
+
+    if (!db.triagens) {
+      db.triagens = [];
+    }
+
+    const triagem = {
+      id: Date.now(),
+
+      // Dados do animal
+      nome: dados.nomeAnimal || dados.nome || "",
+      nomeAnimal: dados.nomeAnimal || dados.nome || "",
+      especie: dados.especie || "",
+      raca: dados.raca || "",
+      dataNascimento: dados.dataNascimento || "",
+      sexo: dados.sexo || "",
+      peso: dados.peso || "",
+      cor: dados.cor || "",
+      tipoSanguineo: dados.tipoSanguineo || "",
+
+      // Dados de saúde
+      sintoma: dados.sintoma || "",
+      temperatura: dados.temperatura || 0,
+      alergia: dados.alergia || "",
+      observacao: dados.observacao || "",
+
+      // Classificação
+      risco: dados.risco || "verde",
+      motivoRisco: dados.motivoRisco || "",
+      origemClassificacao: dados.origemClassificacao || "",
+      requerRevisaoVeterinaria: true,
+
+      // Status
+      status: "aguardando_medico",
+      createdAt: new Date()
+    };
+
+    db.triagens.push(triagem);
+
+    writeDB(db);
+
+    res.status(201).json({
+      mensagem: "Triagem salva com sucesso!",
+      triagem: triagem
+    });
+
+  } catch (erro) {
+
+    console.error("Erro ao salvar triagem:", erro);
+
+    res.status(500).json({
+      erro: "Erro interno ao salvar a triagem."
+    });
+
   }
 
-  const triagem = {
-    id: Date.now(),
-    nome: req.body.nome,
-    sintoma: req.body.sintoma,
-    temperatura: req.body.temperatura,
-    alergia: req.body.alergia,
-    observacao: req.body.observacao,
-    risco,
-    status: "aguardando_medico",
-    createdAt: new Date()
-  };
-
-  db.triagens.push(triagem);
-  writeDB(db);
-
-  res.json(triagem);
 });
 
 // LISTAR TRIAGENS
@@ -114,8 +153,7 @@ app.get("/triagens", (req, res) => {
 
 // ============ MÍDIA INDOOR - TV ============
 
-// Função criada para enviar a chamada do paciente para a tela da TV.
-// Serve para triagem chamar o paciente no guichê e para o médico chamar no consultório.
+// CHAMAR PACIENTE NA TV
 app.post("/tv/chamar", (req, res) => {
   const db = readDB();
 
@@ -124,21 +162,28 @@ app.post("/tv/chamar", (req, res) => {
     localTipo: req.body.localTipo,
     localNumero: req.body.localNumero,
     paciente: req.body.paciente,
-    hora: new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })
+    hora: new Date().toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit"
+    })
   };
 
   db.tv_chamada = chamada;
   db.tv_historico.unshift(chamada);
-  if (db.tv_historico.length > 5) db.tv_historico.pop();
+
+  if (db.tv_historico.length > 5) {
+    db.tv_historico.pop();
+  }
 
   writeDB(db);
+
   res.json(chamada);
 });
 
-// Função criada para consultar a chamada atual e o histórico que será exibido na TV.
-// Essa rota é usada para atualizar a tela automaticamente a cada poucos segundos.
+// CONSULTAR CHAMADA ATUAL E HISTÓRICO
 app.get("/tv/chamada", (req, res) => {
   const db = readDB();
+
   res.json({
     chamada: db.tv_chamada,
     historico: db.tv_historico
@@ -186,9 +231,9 @@ app.get("/medicacoes", (req, res) => {
   res.json(db.consultas);
 });
 
-// START
-const PORT = process.env.PORT
-        || 3000; 
+// START SERVIDOR
+const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
-  console.log(`Porta ${PORT}`);
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
