@@ -15,6 +15,11 @@
 "senha": "123",
 "tipo": "atendimento"
 }
+  {
+  "usuario": "almoxarifado",
+  "senha": "123",
+  "tipo": "almoxarifado"
+  },
 ],
 "pacientes": [
 {
