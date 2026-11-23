@@ -1,20 +1,24 @@
-{
-  "usuarios": [
-    {
-      "usuario": "triagem",
-      "senha": "123",
-      "tipo": "triagem"
-    },
-    {
-      "usuario": "medico",
-      "senha": "123",
-      "tipo": "medico"
-    },
-    {
-      "usuario": "atendimento",
-      "senha": "123",
-      "tipo": "atendimento"
-    }
+"usuarios": [
+  {
+    "usuario": "triagem",
+    "senha": "123",
+    "tipo": "triagem"
+  },
+  {
+    "usuario": "medico",
+    "senha": "123",
+    "tipo": "medico"
+  },
+  {
+    "usuario": "atendimento",
+    "senha": "123",
+    "tipo": "atendimento"
+  },
+  {
+    "usuario": "almoxarifado",
+    "senha": "123",
+    "tipo": "almoxarifado"
+  }
   ],
   "pacientes": [
     {
