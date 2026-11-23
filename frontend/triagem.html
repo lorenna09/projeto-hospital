@@ -4,6 +4,7 @@
 
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Triagem Veterinária</title>
 <link rel="stylesheet" href="style.css">
 
@@ -106,7 +107,6 @@ button:hover{
 }
 
 </style>
-
 </head>
 
 <body>
@@ -215,11 +215,10 @@ button:hover{
 
 <textarea id="observacao" placeholder="Observações"></textarea>
 
-<!-- Resultado da classificação -->
 <div id="resultado"></div>
 
-<!-- Área de análise da IA -->
 <div id="analiseIA">
+
   <h3 style="margin-top:0;">🤖 Análise inteligente da triagem</h3>
 
   <p id="textoIA">
@@ -233,9 +232,10 @@ button:hover{
   <small style="display:block;margin-top:12px;color:#555;">
     Análise demonstrativa. A classificação deve ser revisada por um veterinário.
   </small>
+
 </div>
 
-<button onclick="salvar()">
+<button type="button" onclick="salvar()">
   🐾 Salvar Triagem
 </button>
 
@@ -278,10 +278,12 @@ function classificarRisco(sintoma, temperatura, observacao){
     sinaisGravesTexto.some(sinal => texto.includes(sinal)) ||
     temperatura >= 40
   ){
+
     return {
       risco:"vermelho",
       motivo:"Possíveis sinais de emergência. O animal precisa de avaliação veterinária imediata."
     };
+
   }
 
   if(
@@ -290,33 +292,38 @@ function classificarRisco(sintoma, temperatura, observacao){
     (temperatura > 0 && temperatura < 37.5) ||
     texto.trim() !== ""
   ){
+
     return {
       risco:"amarelo",
       motivo:"Os dados indicam a necessidade de avaliação veterinária prioritária."
     };
+
   }
 
   return {
     risco:"verde",
     motivo:"As regras demonstrativas não identificaram sinais de alerta nos dados informados. Isso não descarta problemas de saúde."
   };
+
 }
 
 
-// IA demonstrativa: analisa os dados preenchidos.
 function analisarComIA(){
 
   const sintoma = document.getElementById("sintoma").value;
   const temperaturaCampo = document.getElementById("temp").value;
-  const temperatura = Number(temperaturaCampo);
+  const temperatura = temperaturaCampo === "" ? 0 : Number(temperaturaCampo);
   const observacao = document.getElementById("observacao").value;
 
   const textoIA = document.getElementById("textoIA");
   const resultado = document.getElementById("resultado");
 
   if(!sintoma){
+
     textoIA.textContent = "Selecione o problema ou sintoma do animal antes de realizar a análise.";
+
     return;
+
   }
 
   const analise = classificarRisco(
@@ -328,17 +335,20 @@ function analisarComIA(){
   window.analiseAtual = analise;
 
   resultado.className = analise.risco;
+
   resultado.textContent =
     "Risco sugerido: " + analise.risco.toUpperCase();
 
   textoIA.textContent =
     "Classificação sugerida: " + analise.risco.toUpperCase() +
     ". " + analise.motivo;
+
 }
 
 
-// Salva a triagem no backend existente.
-function salvar(){
+async function salvar(){
+
+  const temperaturaCampo = document.getElementById("temp").value;
 
   const dados = {
 
@@ -351,18 +361,36 @@ function salvar(){
     cor: document.getElementById("cor").value,
     tipoSanguineo: document.getElementById("tipoSanguineo").value,
     sintoma: document.getElementById("sintoma").value,
-    temperatura: Number(document.getElementById("temp").value),
+    temperatura: temperaturaCampo === "" ? 0 : Number(temperaturaCampo),
     alergia: document.getElementById("alergia").value,
     observacao: document.getElementById("observacao").value
 
   };
 
-  if(!dados.sintoma){
-    alert("Selecione o problema ou sintoma do animal.");
+  if(!dados.nomeAnimal.trim()){
+
+    alert("Digite o nome do animal.");
+
     return;
+
   }
 
-  // Analisa novamente para garantir que os dados atuais sejam usados.
+  if(!dados.especie){
+
+    alert("Selecione a espécie do animal.");
+
+    return;
+
+  }
+
+  if(!dados.sintoma){
+
+    alert("Selecione o problema ou sintoma do animal.");
+
+    return;
+
+  }
+
   const analise = classificarRisco(
     dados.sintoma,
     dados.temperatura,
@@ -381,38 +409,39 @@ function salvar(){
   );
 
   if(!confirmar){
+
     return;
+
   }
 
-  fetch("http://localhost:3000/triagem", {
+  try{
 
-    method:"POST",
+    const resposta = await fetch("/triagem", {
 
-    headers:{
-      "Content-Type":"application/json"
-    },
+      method:"POST",
 
-    body:JSON.stringify(dados)
+      headers:{
+        "Content-Type":"application/json"
+      },
 
-  })
+      body:JSON.stringify(dados)
 
-  .then(async resposta => {
+    });
 
-    const texto = await resposta.text();
+    const dadosResposta = await resposta.json();
 
     if(!resposta.ok){
-      throw new Error(texto || "Erro ao salvar a triagem.");
+
+      throw new Error(
+        dadosResposta.erro || "Erro ao salvar a triagem."
+      );
+
     }
-
-    return texto ? JSON.parse(texto) : {};
-
-  })
-
-  .then(() => {
 
     const resultado = document.getElementById("resultado");
 
     resultado.className = dados.risco;
+
     resultado.textContent =
       "Classificação sugerida: " + dados.risco.toUpperCase();
 
@@ -421,22 +450,21 @@ function salvar(){
 
     alert("🐶✅ Triagem salva com sucesso!");
 
-  })
+  }catch(erro){
 
-  .catch(erro => {
-
-    console.error(erro);
+    console.error("Erro ao salvar triagem:", erro);
 
     alert(
       "❌ Erro ao salvar a triagem.\n\n" +
       erro.message
     );
 
-  });
+  }
 
 }
 
 </script>
 
 </body>
-</html>
+    </html>
+                           
